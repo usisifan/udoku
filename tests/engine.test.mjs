@@ -26,7 +26,7 @@ test('legacy completed and lost rounds keep their status and best-result history
  assert.deepEqual(E.validCompletions({completed:{1:completed},rounds:{1:won}},levels),{1:completed});
  const lost={...won,marks:E.create(p).marks,lives:0,status:'lost'};const r=E.restore(lost,p);assert.equal(r.status,'lost');assert.equal(E.hint(r,p).type,'ignored');
 });
-test('opening clues and resources match each campaign band',()=>{for(const p of levels){const expected=p.id<40?[2,2,1]:p.id<60?[5,3,4]:p.id<80?[6,3,5]:[7,3,6],s=E.create(p);assert.deepEqual([s.hints,s.lives,s.marks.filter(x=>x===2).length],expected);assert.equal(s.marks[p.given],2);for(const i of E.starters(p)){assert.ok(p.solution.includes(i));assert.equal(E.mark(s,i,0),false);assert.equal(E.place(s,p,i).type,'ignored');}}});
+test('opening clues and resources match each campaign band',()=>{for(const p of levels){const expected=p.id<40?[2,2,1]:p.id<60?[5,3,5]:p.id<80?[6,4,6]:[7,4,8],s=E.create(p);assert.deepEqual([s.hints,s.lives,s.marks.filter(x=>x===2).length],expected);assert.equal(s.marks[p.given],2);for(const i of E.starters(p)){assert.ok(p.solution.includes(i));assert.equal(E.mark(s,i,0),false);assert.equal(E.place(s,p,i).type,'ignored');}}});
 test('older saved rounds gain their opening clue without refunding hint or lives',()=>{const p=levels[0],s=E.create(p);s.marks[p.given]=1;s.hints=0;s.lives=1;const r=E.restore(s,p);assert.equal(r.marks[p.given],2);assert.equal(r.hints,0);assert.equal(r.lives,1);});
 test('all later openings span different regions and directions with stable positions',()=>{
  for(const p of levels.filter(p=>p.id>=40)){
@@ -48,13 +48,13 @@ test('old campaign saves keep prior uses, mistakes, marks and elapsed time acros
   assert.equal(r.status,lives?'playing':'lost');assert.deepEqual(E.restore(structuredClone(r),p),r);assert.deepEqual(saved,snapshot);
  }
 });
-test('later tiers allow exactly their hint budget and three mistakes without reload refills',()=>{
+test('later tiers allow exactly their hint budget and life allowance without reload refills',()=>{
  for(const id of [40,59,60,79,80,100]){
   const p=levels[id-1],config=E.rules(p);let s=E.create(p);
   for(let i=0;i<config.hints;i++){assert.equal(E.hint(s,p).hint,true);s=E.restore(structuredClone(s),p);assert.equal(s.hints,config.hints-i-1);}
   const before=structuredClone(s);assert.equal(E.hint(s,p).type,'ignored');assert.deepEqual(s,before);
   const wrong=p.regions.findIndex((_,i)=>!p.solution.includes(i));
-  for(let i=0;i<3;i++){assert.equal(E.place(s,p,wrong).type,i===2?'lost':'mistake');s=E.restore(structuredClone(s),p);assert.equal(s.lives,2-i);}
+  for(let i=0;i<config.lives;i++){assert.equal(E.place(s,p,wrong).type,i===config.lives-1?'lost':'mistake');s=E.restore(structuredClone(s),p);assert.equal(s.lives,config.lives-1-i);}
   assert.equal(E.place(s,p,wrong).type,'ignored');assert.equal(E.hint(s,p).type,'ignored');
  }
 });
@@ -66,7 +66,7 @@ test('additional opening clues may finish a nearly complete old round without sp
 test('sequential unlocking requires every earlier level and handles campaign end',()=>{assert.equal(E.unlocked({}),1);assert.equal(E.canPlay(2,{}),false);assert.equal(E.unlocked({1:{},3:{}}),2);assert.equal(E.canPlay(3,{1:{},3:{}}),false);assert.equal(E.canPlay(0,{}),false);assert.equal(E.canPlay(1.5,{}),false);const done=Object.fromEntries(levels.map(p=>[p.id,{}]));assert.equal(E.unlocked(done),100);assert.equal(E.canPlay(100,done),true);assert.equal(E.canPlay(101,done),false);});
 test('changed puzzle completions are rejected and old matching records migrate',()=>{const [a,b]=levels,saved={completed:{1:{elapsed:10,hash:'old'},2:{elapsed:20}},rounds:{2:{hash:b.sha256}}};assert.deepEqual(Object.keys(E.validCompletions(saved,levels)),['2']);assert.equal(E.validCompletions(saved,levels)[2].hash,b.sha256);saved.completed[1]={elapsed:0,hash:a.sha256};assert.equal(E.unlocked(E.validCompletions(saved,levels)),3);});
 test('early boards grow from 4x4 and can be solved from one clue without branching',()=>{assert.deepEqual(levels.slice(0,10).map(p=>p.n),[4,5,5,6,6,6,7,7,8,10]);for(const p of levels.slice(0,9)){const initial=E.create(p).marks,r=solve(model(p.n,p.k,p.regions),{initial,maxNodes:1});assert.equal(r.aborted,false);assert.equal(r.count,1);assert.deepEqual(r.solutions[0],p.solution);}});
-test('all exact solutions produce a win, with count matching row quota',()=>{for(const p of levels){const s=E.create(p);for(const i of p.solution)E.place(s,p,i);assert.equal(s.status,'won');assert.equal(s.lives,p.id<40?2:3);assert.equal(s.marks.filter(v=>v===2).length,p.n*p.k);}});
+test('all exact solutions produce a win, with count matching row quota',()=>{for(const p of levels){const s=E.create(p);for(const i of p.solution)E.place(s,p,i);assert.equal(s.status,'won');assert.equal(s.lives,p.id<40?2:p.id<60?3:4);assert.equal(s.marks.filter(v=>v===2).length,p.n*p.k);}});
 test('invalid restored marks, changed puzzle hash, and malformed saves reset safely',()=>{const p=levels[0],s=E.create(p);s.hash='outdated';assert.deepEqual(E.restore(s,p),E.create(p));s.hash=p.sha256;s.marks[p.regions.findIndex((_,i)=>!p.solution.includes(i))]=2;assert.deepEqual(E.restore(s,p),E.create(p));assert.deepEqual(E.restore(null,p),E.create(p));});
 test('100 distinct boards have connected regions and valid placed solutions',()=>{assert.equal(levels.length,100);assert.equal(new Set(levels.map(p=>p.sha256)).size,100);for(const p of levels)assert.equal(validate(p.n,p.k,p.regions,p.solution),true);});
 test('solver agrees with independent exhaustive permutation oracle on 200 small boards',()=>{

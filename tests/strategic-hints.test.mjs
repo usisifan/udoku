@@ -22,7 +22,7 @@ test('all 61 later boards have a branch-free solving path within their existing 
   assert.equal(r.count,1,'unique completion on '+p.id);assert.equal(r.nodes,1,'no search branches on '+p.id);
   assert.deepEqual(r.solutions[0],p.solution);assert.deepEqual(E.create(p).marks,opening);
   for(const i of r.solutions[0])E.place(s,p,i);
-  assert.equal(s.status,'won');assert.equal(s.lives,3);
+  assert.equal(s.status,'won');assert.equal(s.lives,p.id<60?3:4);
  }
 });
 
@@ -42,7 +42,7 @@ test('level 40 now opens a complete logic path in at most three hints',()=>{
  for(let i=0;i<3;i++)E.hint(s,p);
  const r=solve(m,{initial:s.marks,maxNodes:1});
  assert.equal(r.aborted,false);assert.equal(r.count,1);assert.equal(s.hints,2);
- assert.equal(s.marks.filter(v=>v===2).length,7,'the rest remain for the player to deduce');
+ assert.equal(s.marks.filter(v=>v===2).length,8,'the rest remain for the player to deduce');
 });
 
 test('early-level hint behavior and budgets remain unchanged',()=>{

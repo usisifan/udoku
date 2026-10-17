@@ -1,6 +1,6 @@
 {
   "name": "udoku",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "private": true,
   "description": "우시시와 아야단의 오리지널 논리 퍼즐",
   "main": "main.cjs",

@@ -1,0 +1,34 @@
+udoku web 0.4.3 — more starting clues and late-game lives (2026-10-18 KST)
+
+Levels 1–39: unchanged, 2 hints / 2 lives / 1 opening Ayadan.
+Levels 40–59: 5 hints / 3 lives / 5 opening Ayadan; 10/28 = 35.714% maximum direct help.
+Levels 60–79: 6 hints / 4 lives / 6 opening Ayadan; 12/32 = 37.5% maximum direct help.
+Levels 80–100: 7 hints / 4 lives / 8 opening Ayadan; 15/40 = 37.5% maximum direct help.
+These ratios count every available hint once plus starting clues; lives are not
+revealed answers and do not contribute to this ratio.
+
+All previous opening cells remain in the deterministic selection. New openings
+are in distinct color regions, cover all four quarters, and span at least half
+the board on each axis. Puzzle data, IDs, hashes, solutions, save format/key,
+character assets, and completion badges are unchanged. Start-page life/chance
+copy remains removed.
+
+Compatibility: existing v0.4.2 hint limits do not increase, so hint uses are not
+refunded. Active level 60–100 rounds gain the one-life allowance difference once,
+while previous mistakes remain counted; lost rounds remain lost during engine
+restoration. New starting cells are revealed in active rounds without spending
+hints. Old notes, time and completion history are retained, except X notes on new
+correct starting cells become Ayadan. Repeated reloads grant no further resources.
+
+Verification: 25 Node tests passed, including 3,180 version-4 migration cases
+covering v0.4.0/1 and v0.4.2 allowances, plus older-save migration and all campaign
+resource checks. 107 isolated Chromium/mobile UI checks passed, including
+four-life loss, spent-resource reloads, version-0.4.2 migration, completion badges,
+offline loading and narrow layouts. The 320px four-heart header was visually
+inspected. Physical phones were not tested. Electron test flags remain test-only.
+All 61 later puzzles still have a propagation-only solving path within the hint
+budget; maximum hints on verified paths are 3/5, 4/6 and 4/7 by band.
+
+Only web/source in usisifan/udoku (ID 1423187970) is updated. Existing Windows
+0.2.0 releases and unrelated repositories are untouched. Cache v0.4.3 activates
+normally after old game tabs close, without forcing active games to reload.
