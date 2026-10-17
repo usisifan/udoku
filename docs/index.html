@@ -14,8 +14,8 @@
 <div class="home-copy"><span class="home-eyebrow">한 칸씩, 함께 풀어요</span><h1>시시의<br><em>퍼즐 목장</em></h1><p class="home-description">아야단들은 어디에 숨어 있을까요?<br>작은 목장에서 시작하는 차근차근 논리 여행.</p><div class="home-actions"><button class="primary home-play" id="home-play">게임 시작 <span>→</span></button><button class="secondary" id="home-levels">레벨 선택</button></div><div class="home-progress"><span id="home-progress-label">0 / 100 완료</span><span id="home-next-label">첫 번째 목장이 기다려요</span></div><div class="home-progress-track"><span id="home-progress-bar"></span></div></div>
 <div class="home-art"><div class="home-orbit"></div><span class="home-star a">✦</span><span class="home-star b">✦</span><img class="home-character" src="assets/ushishi.png" alt="아야단 거품 탈을 쓴 우시시"><div class="home-bubble">한 마리는 내가 먼저 찾았어!<br><b>나머지 아야단도 찾아줄래?</b></div></div>
 </div>
-<div class="home-howto"><div><span class="howto-symbol">×</span><p><strong>쓱 밀어서 X</strong><small>아닌 칸은 표시해 두기</small></p></div><div><img src="assets/ayadan.png" alt=""><p><strong>두 번 톡, 아야단</strong><small>확실한 자리에 놓기</small></p></div><div><span class="howto-symbol heart">♥ ♥</span><p><strong>기회는 두 번</strong><small>힌트는 한 라운드에 한 번</small></p></div></div>
-<footer class="home-footer"><span>직접 만든 오리지널 퍼즐 · v0.3.0</span><div><button id="theme-toggle" type="button">화면: 자동</button><button id="home-install" hidden>홈 화면에 설치</button><button id="install-help">홈 화면에 추가하는 방법</button><button id="reset-progress" type="button">진행 초기화</button></div></footer>
+<div class="home-howto"><div><span class="howto-symbol">×</span><p><strong>쓱 밀어서 X</strong><small>아닌 칸은 표시해 두기</small></p></div><div><img src="assets/ayadan.png" alt=""><p><strong>두 번 톡, 아야단</strong><small>확실한 자리에 놓기</small></p></div><div><span class="howto-symbol heart">♥ ♥</span><p><strong>기회는 두 번</strong><small>힌트는 한 라운드에 두 번</small></p></div></div>
+<footer class="home-footer"><span>직접 만든 오리지널 퍼즐 · v0.3.1</span><div><button id="theme-toggle" type="button">화면: 자동</button><button id="home-install" hidden>홈 화면에 설치</button><button id="install-help">홈 화면에 추가하는 방법</button><button id="reset-progress" type="button">진행 초기화</button></div></footer>
 </section>
 <div class="app" id="game-view" hidden>
 <header class="topbar">
@@ -43,7 +43,7 @@
 <div class="board-viewport" id="board-viewport"><div class="board-shell"><div id="board" class="board" role="grid" aria-label="아야단 논리 퍼즐"></div><div class="board-cover" id="board-cover" hidden></div></div></div>
 <div class="play-footer">
 <div class="gestures"><svg viewBox="0 0 28 36"><rect x="4" y="5" width="20" height="28" rx="10"/><path d="M14 5v12M4 17h20M14 1v9"/></svg><span><span class="desktop-instruction">드래그</span><span class="touch-instruction">쓱 밀기</span> <b>× 표시</b><i>·</i><span class="desktop-instruction">더블클릭</span><span class="touch-instruction">두 번 톡</span> <b>아야단</b></span></div>
-<button id="hint" class="action-button"><span class="bulb">☼</span><span><strong id="hint-label">힌트 1/1</strong><small>라운드당 1회</small></span></button>
+<button id="hint" class="action-button"><span class="bulb">☼</span><span><strong id="hint-label">힌트 2/2</strong><small>라운드당 2회</small></span></button>
 <button id="restart" class="action-button"><span class="restart-symbol">↻</span><strong>다시 시작</strong></button>
 </div>
 <div class="footnote"><span id="level-note">천천히 살펴보고, 확실한 자리에 놓아 주세요.</span><div><button id="go-home">첫 화면</button><button id="about">게임 안내</button></div></div>

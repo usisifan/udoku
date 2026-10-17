@@ -1,6 +1,6 @@
-const CACHE='udoku-v0.3.0';
+const CACHE='udoku-v0.3.1';
 const FILES=['./','index.html','style.css','theme.js','app.js','engine.js','levels.js','pwa.js','manifest.webmanifest','assets/ushishi.png','assets/ayadan.png','assets/favicon.png','assets/app-icon-192.png','assets/app-icon-512.png'];
-self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES))));
+self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES.map(file=>new Request(file,{cache:'reload'}))))));
 self.addEventListener('activate',event=>event.waitUntil((async()=>{for(const key of await caches.keys())if(key.startsWith('udoku-')&&key!==CACHE)await caches.delete(key);await self.clients.claim();})()));
 self.addEventListener('fetch',event=>{
  const url=new URL(event.request.url);

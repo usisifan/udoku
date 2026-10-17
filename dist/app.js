@@ -61,7 +61,7 @@ function updateHUD(){
  $('level-number').textContent=String(puzzle.id).padStart(3,'0');$('count').textContent=state.marks.filter(v=>v===2).length+' / '+(puzzle.n*puzzle.k);
  $('hearts').innerHTML=Array.from({length:2},(_,i)=>'<span'+(i>=state.lives?' class="heart-lost"':'')+'>♥</span>').join(' ');
  $('life-count').textContent=state.lives+' / 2';$('life-count').setAttribute('aria-label','남은 목숨 '+state.lives+'회');
- $('hint-label').textContent='힌트 '+state.hints+'/1';$('hint').disabled=state.hints===0||state.status!=='playing';$('pause').disabled=state.status!=='playing';
+ $('hint-label').textContent='힌트 '+state.hints+'/'+E.HINT_LIMIT;$('hint').disabled=state.hints===0||state.status!=='playing';$('pause').disabled=state.status!=='playing';
  $('time').textContent=formatTime(state.elapsed);$('sound').dataset.enabled=String(store.sound);$('sound').title=store.sound?'소리 끄기':'소리 켜기';$('sound').setAttribute('aria-label',$('sound').title);
  $('level-note').textContent=puzzle.k===1?'각 줄과 색 구역마다 아야단 한 마리. 대각선도 조심해요!':'각 줄과 색 구역마다 아야단 두 마리. 서로 붙지 않게 놓아 주세요.';
 }
@@ -91,7 +91,7 @@ function takeResult(result){
   toast(state.lives?'이 칸은 아야단의 자리가 아니에요. 남은 목숨 1회!':'목숨을 모두 사용했어요.');
  }else{
   updateCell(result.index);const cell=cells[result.index];cell.classList.add('pop');setTimeout(()=>cell.classList.remove('pop'),300);sound(result.type==='won'?'won':'placed');
-  if(result.hint){cell.classList.add('hinted');setTimeout(()=>cell.classList.remove('hinted'),1700);toast('아야단 한 마리를 찾았어요. 이번 라운드의 힌트를 사용했어요.');}
+  if(result.hint){cell.classList.add('hinted');setTimeout(()=>cell.classList.remove('hinted'),1700);toast('아야단 한 마리를 찾았어요. 힌트가 '+state.hints+'회 남았어요.');}
  }
  updateHUD();scheduleSave();
  const resultState=state;
@@ -99,7 +99,7 @@ function takeResult(result){
  if(result.type==='lost')setTimeout(()=>{if(state===resultState)showResult(false);},450);
 }
 function place(i){if(paused)return;cancelTap(false);tick();takeResult(E.place(state,puzzle,i));}
-function recordWin(){tick();const old=store.completed[puzzle.id];if(!old||state.elapsed<old.elapsed)store.completed[puzzle.id]={hash:puzzle.sha256,elapsed:state.elapsed,lives:state.lives,hintsUsed:1-state.hints,date:new Date().toISOString()};scheduleSave();}
+function recordWin(){tick();const old=store.completed[puzzle.id];if(!old||state.elapsed<old.elapsed)store.completed[puzzle.id]={hash:puzzle.sha256,elapsed:state.elapsed,lives:state.lives,hintsUsed:E.HINT_LIMIT-state.hints,date:new Date().toISOString()};scheduleSave();}
 function openModal(html,kind){
  cancelTap(true);gesture=null;tick();paused=true;modalKind=kind;$('board-cover').hidden=false;$('modal-content').innerHTML=html;if(!$('modal').open)$('modal').showModal();lastTick=performance.now();scheduleSave();
 }
@@ -143,15 +143,15 @@ function openLevels(){
  $('modal-content').querySelectorAll('[data-level]').forEach(btn=>btn.onclick=()=>{const id=Number(btn.dataset.level);if(!E.canPlay(id,store.completed,levels.length))return;$('modal').close();modalKind='';if(loadLevel(id))showGame();});
 }
 function restartPrompt(){
- openModal('<div class="modal-inner center"><h2 id="modal-title">처음부터 도전할까요?</h2><p>이 라운드의 표시가 모두 지워져요.<br>목숨 2회와 힌트 1회로 새로 시작합니다.</p><div class="modal-actions"><button class="secondary" id="restart-cancel">계속 풀기</button><button class="primary" id="restart-yes">다시 시작</button></div></div>','restart');
+ openModal('<div class="modal-inner center"><h2 id="modal-title">처음부터 도전할까요?</h2><p>이 라운드의 표시가 모두 지워져요.<br>목숨 2회와 힌트 2회로 새로 시작합니다.</p><div class="modal-actions"><button class="secondary" id="restart-cancel">계속 풀기</button><button class="primary" id="restart-yes">다시 시작</button></div></div>','restart');
  $('restart-cancel').onclick=closeModal;$('restart-yes').onclick=()=>{$('modal').close();loadLevel(puzzle.id,true);};
 }
 function showResult(won){
- openModal('<div class="modal-inner center"><img class="modal-mascot" src="assets/ayadan.png" alt=""><span class="tiny-label">LEVEL '+String(puzzle.id).padStart(3,'0')+'</span><h2 id="modal-title">'+(won?(puzzle.id===100?'마지막 도전도 성공!':'모두 찾았어요!'):'다시 도전해 볼까요?')+'</h2><p>'+(won?'아야단들이 자기 자리를 찾았어요.':'두 번의 기회를 모두 사용했어요.<br>천천히 살펴보면 분명 찾을 수 있어요.')+'</p><div class="result-stats"><div><span>플레이 시간</span><b>'+formatTime(state.elapsed)+'</b></div><div><span>남은 목숨</span><b>'+state.lives+' / 2</b></div><div><span>힌트 사용</span><b>'+(1-state.hints)+' / 1</b></div></div><div class="modal-actions"><button class="secondary" id="result-levels">레벨 선택</button><button class="primary" id="result-next">'+(won&&puzzle.id<100?'다음 레벨':'다시 도전')+'</button></div></div>','result');
+ openModal('<div class="modal-inner center"><img class="modal-mascot" src="assets/ayadan.png" alt=""><span class="tiny-label">LEVEL '+String(puzzle.id).padStart(3,'0')+'</span><h2 id="modal-title">'+(won?(puzzle.id===100?'마지막 도전도 성공!':'모두 찾았어요!'):'다시 도전해 볼까요?')+'</h2><p>'+(won?'아야단들이 자기 자리를 찾았어요.':'두 번의 기회를 모두 사용했어요.<br>천천히 살펴보면 분명 찾을 수 있어요.')+'</p><div class="result-stats"><div><span>플레이 시간</span><b>'+formatTime(state.elapsed)+'</b></div><div><span>남은 목숨</span><b>'+state.lives+' / 2</b></div><div><span>힌트 사용</span><b>'+(E.HINT_LIMIT-state.hints)+' / '+E.HINT_LIMIT+'</b></div></div><div class="modal-actions"><button class="secondary" id="result-levels">레벨 선택</button><button class="primary" id="result-next">'+(won&&puzzle.id<100?'다음 레벨':'다시 도전')+'</button></div></div>','result');
  $('result-levels').onclick=openLevels;$('result-next').onclick=()=>{const next=won&&puzzle.id<100?puzzle.id+1:puzzle.id;$('modal').close();loadLevel(next,true);};
 }
 function showAbout(){
- openModal('<div class="modal-inner"><div class="modal-top"><h2 id="modal-title">시시의 퍼즐 목장</h2><button class="close-modal" id="close-about" aria-label="닫기">×</button></div><p>우시시와 함께 아야단의 자리를 찾는 논리 퍼즐.</p><ul class="about-list"><li>100개의 문제는 기존 게임의 문제를 가져오지 않고 직접 생성했어요. 모든 문제의 구역 연결성과 정답이 하나임을 검증했습니다.</li><li>4×4부터 차근차근 커져요. 시작할 때 아야단 한 마리를 무료로 공개하며, 이전 레벨을 완료해야 다음 레벨이 열립니다. 1–39레벨은 각 1마리, 40–100레벨은 각 2마리를 찾아요. 레벨이 올라가면 보드가 커집니다.</li><li>드래그하거나 한 번 클릭하면 X를 표시해요. X에서 드래그를 시작하면 표시를 지울 수 있어요. 두 번 클릭하거나 톡톡 누르면 아야단을 놓습니다. 작은 화면의 큰 보드는 확대 후 화면 이동 버튼으로 살펴볼 수 있어요.</li><li>잘못 놓으면 목숨을 1회 잃어요. 찾은 아야단은 다시 지울 수 없어요. 힌트는 라운드마다 한 번 사용할 수 있어요.</li><li><span class="keycap">방향키</span> 이동 · <span class="keycap">X</span> 표시 · <span class="keycap">Enter</span> 아야단 · <span class="keycap">Esc</span> 일시정지 · <span class="keycap">F11</span> 전체 화면</li><li>PC 프로그램은 오프라인에서 실행됩니다. 웹앱은 첫 로딩 후 오프라인으로 이용할 수 있습니다. 기록은 현재 기기·브라우저에 자동 저장되며 서로 동기화되지 않습니다.</li></ul><p style="font-size:11px">캐릭터 원화: 사용자 제공 우시시·아야단 이미지<br>오리지널 퍼즐 100개 · 버전 0.3.0</p></div>','about');$('close-about').onclick=closeModal;
+ openModal('<div class="modal-inner"><div class="modal-top"><h2 id="modal-title">시시의 퍼즐 목장</h2><button class="close-modal" id="close-about" aria-label="닫기">×</button></div><p>우시시와 함께 아야단의 자리를 찾는 논리 퍼즐.</p><ul class="about-list"><li>100개의 문제는 기존 게임의 문제를 가져오지 않고 직접 생성했어요. 모든 문제의 구역 연결성과 정답이 하나임을 검증했습니다.</li><li>4×4부터 차근차근 커져요. 시작할 때 아야단 한 마리를 무료로 공개하며, 이전 레벨을 완료해야 다음 레벨이 열립니다. 1–39레벨은 각 1마리, 40–100레벨은 각 2마리를 찾아요. 레벨이 올라가면 보드가 커집니다.</li><li>드래그하거나 한 번 클릭하면 X를 표시해요. X에서 드래그를 시작하면 표시를 지울 수 있어요. 두 번 클릭하거나 톡톡 누르면 아야단을 놓습니다. 작은 화면의 큰 보드는 확대 후 화면 이동 버튼으로 살펴볼 수 있어요.</li><li>잘못 놓으면 목숨을 1회 잃어요. 찾은 아야단은 다시 지울 수 없어요. 힌트는 라운드마다 두 번 사용할 수 있어요.</li><li><span class="keycap">방향키</span> 이동 · <span class="keycap">X</span> 표시 · <span class="keycap">Enter</span> 아야단 · <span class="keycap">Esc</span> 일시정지 · <span class="keycap">F11</span> 전체 화면</li><li>PC 프로그램은 오프라인에서 실행됩니다. 웹앱은 첫 로딩 후 오프라인으로 이용할 수 있습니다. 기록은 현재 기기·브라우저에 자동 저장되며 서로 동기화되지 않습니다.</li></ul><p style="font-size:11px">캐릭터 원화: 사용자 제공 우시시·아야단 이미지<br>오리지널 퍼즐 100개 · 버전 0.3.1</p></div>','about');$('close-about').onclick=closeModal;
 }
 function confetti(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const host=$('confetti');host.replaceChildren();for(let i=0;i<36;i++){const el=document.createElement('i');el.style.left=Math.random()*100+'%';el.style.setProperty('--c',palette[i%8]);el.style.setProperty('--d',2+Math.random()*1.8+'s');el.style.setProperty('--r',Math.random()*180+'deg');host.append(el);}setTimeout(()=>host.replaceChildren(),4500);}
 function bind(){

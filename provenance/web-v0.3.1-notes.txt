@@ -1,0 +1,23 @@
+udoku web 0.3.1 — two hints per round
+
+Round save version 3 increases the allowance from one hint to two. For legacy
+rounds (versions 1/2 or no version), remaining 1 becomes 2 and remaining 0 becomes
+1. The number already used is preserved. Restored rounds are saved as version 3,
+so subsequent reloads do not grant another hint. New and restarted rounds get 2.
+
+The browser save key, origin, puzzle IDs/hashes, and progress container version
+are unchanged. Board marks, lives, elapsed time, completions, level unlocks,
+best-result history, sound and theme settings are retained. Historical hintsUsed
+fields are not rewritten. UI totals, results, restart text and instructions now
+show two hints. Windows 0.2.0 release artifacts are unchanged.
+
+Validation: 15 Node tests passed. 31 isolated Chromium/mobile checks passed in
+web-v0.3.1.json, including pre-update localStorage fixtures for both hint states,
+completed-level history, saved marks/lives/time, using both hints across reloads,
+disabled third use, and result statistics. Puzzle data and artwork are unchanged.
+The 0.3.1 offline cache includes the matching engine and UI together. Active
+sessions are not force-reloaded; the existing service-worker update lifecycle
+applies after the old game tabs/app are closed. Physical phones were not tested.
+
+Test-only runtime flags remain --no-sandbox --in-process-gpu --disable-gpu due to
+this development environment. They are not production configuration changes.

@@ -2,8 +2,31 @@ import test from 'node:test';import assert from 'node:assert/strict';import fs f
 const levels=JSON.parse(fs.readFileSync(new URL('../dist/levels.json',import.meta.url)));
 test('two mistakes end a round; marks and clicks cannot act after loss',()=>{const p=levels[0],s=E.create(p),wrong=p.regions.findIndex((_,i)=>!p.solution.includes(i));assert.equal(E.place(s,p,wrong).type,'mistake');assert.equal(s.lives,1);assert.equal(E.place(s,p,wrong).type,'lost');assert.equal(s.lives,0);assert.equal(E.place(s,p,p.solution[0]).type,'ignored');assert.equal(E.mark(s,p.solution[0],1),false);});
 test('confirmed Ayadan cannot be erased, repeated placement costs no life',()=>{const p=levels[0],s=E.create(p),i=p.solution.find(i=>i!==p.given);E.mark(s,i,1);assert.equal(E.place(s,p,i).type,'placed');assert.equal(E.mark(s,i,0),false);assert.equal(E.place(s,p,i).type,'ignored');assert.equal(s.lives,2);});
-test('hint usable exactly once and remains spent across save/restore',()=>{const p=levels[0],s=E.create(p);assert.equal(E.hint(s,p).hint,true);assert.equal(s.hints,0);const r=E.restore(JSON.parse(JSON.stringify(s)),p);assert.equal(E.hint(r,p).type,'ignored');assert.equal(r.marks.filter(x=>x===2).length,2);assert.equal(E.create(p).hints,1);});
-test('every round starts with exactly one immutable free clue',()=>{for(const p of levels){const s=E.create(p);assert.equal(s.marks.filter(x=>x===2).length,1);assert.equal(s.marks[p.given],2);assert.ok(p.solution.includes(p.given));assert.equal(s.lives,2);assert.equal(s.hints,1);assert.equal(E.mark(s,p.given,0),false);assert.equal(E.place(s,p,p.given).type,'ignored');}});
+test('two hints survive reloads without refills, and a third use is ignored',()=>{
+ const p=levels[0],s=E.create(p);assert.equal(s.hints,2);assert.equal(E.hint(s,p).hint,true);assert.equal(s.hints,1);
+ const r=E.restore(JSON.parse(JSON.stringify(s)),p);assert.equal(r.hints,1);assert.equal(E.hint(r,p).hint,true);assert.equal(r.hints,0);
+ const exhausted=E.restore(JSON.parse(JSON.stringify(r)),p),before=structuredClone(exhausted);
+ assert.equal(E.hint(exhausted,p).type,'ignored');assert.deepEqual(exhausted,before);assert.equal(exhausted.marks.filter(x=>x===2).length,3);
+});
+test('legacy hint allowance migrates once while preserving progress and previous uses',()=>{
+ const p=levels[1];
+ for(const version of [undefined,1,2])for(const remaining of [0,1]){
+  const saved={version,level:p.id,hash:p.sha256,marks:Array(p.n*p.n).fill(0),lives:1,hints:remaining,elapsed:123456,status:'playing'};
+  saved.marks[p.given]=2;saved.marks[p.solution.find(i=>i!==p.given)]=2;saved.marks[p.regions.findIndex((_,i)=>!p.solution.includes(i))]=1;
+  const snapshot=structuredClone(saved),r=E.restore(saved,p);
+  assert.equal(r.version,3);assert.equal(r.hints,remaining+1);assert.equal(2-r.hints,1-remaining);
+  assert.deepEqual(r.marks,saved.marks);assert.equal(r.lives,1);assert.equal(r.elapsed,123456);assert.equal(r.status,'playing');assert.deepEqual(saved,snapshot);
+  assert.deepEqual(E.restore(JSON.parse(JSON.stringify(r)),p),r);
+ }
+});
+test('legacy completed and lost rounds keep their status and best-result history',()=>{
+ const p=levels[0],completed={hash:p.sha256,elapsed:90000,lives:1,hintsUsed:1,date:'2026-10-17T00:00:00.000Z'};
+ const won={version:2,level:1,hash:p.sha256,marks:Array(p.n*p.n).fill(0),lives:1,hints:0,elapsed:90000,status:'won'};for(const i of p.solution)won.marks[i]=2;
+ const restored=E.restore(won,p);assert.equal(restored.status,'won');assert.equal(restored.hints,1);assert.equal(E.hint(restored,p).type,'ignored');
+ assert.deepEqual(E.validCompletions({completed:{1:completed},rounds:{1:won}},levels),{1:completed});
+ const lost={...won,marks:E.create(p).marks,lives:0,status:'lost'};const r=E.restore(lost,p);assert.equal(r.status,'lost');assert.equal(E.hint(r,p).type,'ignored');
+});
+test('every round starts with exactly one immutable free clue',()=>{for(const p of levels){const s=E.create(p);assert.equal(s.marks.filter(x=>x===2).length,1);assert.equal(s.marks[p.given],2);assert.ok(p.solution.includes(p.given));assert.equal(s.lives,2);assert.equal(s.hints,2);assert.equal(E.mark(s,p.given,0),false);assert.equal(E.place(s,p,p.given).type,'ignored');}});
 test('older saved rounds gain their opening clue without refunding hint or lives',()=>{const p=levels[0],s=E.create(p);s.marks[p.given]=1;s.hints=0;s.lives=1;const r=E.restore(s,p);assert.equal(r.marks[p.given],2);assert.equal(r.hints,0);assert.equal(r.lives,1);});
 test('sequential unlocking requires every earlier level and handles campaign end',()=>{assert.equal(E.unlocked({}),1);assert.equal(E.canPlay(2,{}),false);assert.equal(E.unlocked({1:{},3:{}}),2);assert.equal(E.canPlay(3,{1:{},3:{}}),false);assert.equal(E.canPlay(0,{}),false);assert.equal(E.canPlay(1.5,{}),false);const done=Object.fromEntries(levels.map(p=>[p.id,{}]));assert.equal(E.unlocked(done),100);assert.equal(E.canPlay(100,done),true);assert.equal(E.canPlay(101,done),false);});
 test('changed puzzle completions are rejected and old matching records migrate',()=>{const [a,b]=levels,saved={completed:{1:{elapsed:10,hash:'old'},2:{elapsed:20}},rounds:{2:{hash:b.sha256}}};assert.deepEqual(Object.keys(E.validCompletions(saved,levels)),['2']);assert.equal(E.validCompletions(saved,levels)[2].hash,b.sha256);saved.completed[1]={elapsed:0,hash:a.sha256};assert.equal(E.unlocked(E.validCompletions(saved,levels)),3);});
