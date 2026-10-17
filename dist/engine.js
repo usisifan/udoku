@@ -48,7 +48,63 @@ function place(s,p,i){
  if(!p.solution.includes(i)){s.lives--;if(!s.lives)s.status='lost';return {type:s.status==='lost'?'lost':'mistake',index:i};}
  s.marks[i]=2;if(finished(s,p))s.status='won';return {type:s.status==='won'?'won':'placed',index:i};
 }
-function hint(s,p){if(s.status!=='playing'||s.hints<=0)return {type:'ignored'};const i=p.solution.find(i=>s.marks[i]!==2);if(i===undefined)return {type:'ignored'};s.hints--;return {...place(s,p,i),hint:true};}
+// Evaluate clues using deductions only: no search guesses and no player X notes.
+const hintModels=new WeakMap();
+function hintModel(p){
+ if(hintModels.has(p))return hintModels.get(p);
+ const n=p.n,groups=Array.from({length:3*n},()=>[]),memberships=[],neighbors=[];
+ for(let i=0;i<n*n;i++){
+  const r=Math.floor(i/n),c=i%n,ms=[r,n+c,2*n+p.regions[i]],ns=[];
+  memberships.push(ms);for(const g of ms)groups[g].push(i);
+  for(let y=Math.max(0,r-1);y<=Math.min(n-1,r+1);y++)for(let x=Math.max(0,c-1);x<=Math.min(n-1,c+1);x++){const j=y*n+x;if(j!==i)ns.push(j);}
+  neighbors.push(ns);
+ }
+ const m={k:p.k,groups,memberships,neighbors};hintModels.set(p,m);return m;
+}
+function deduceHint(m,a){
+ const {k,groups,memberships,neighbors}=m;let changed=true;
+ while(changed){
+  changed=false;
+  for(let i=0;i<a.length;i++)if(a[i]===AYADAN)for(const j of neighbors[i]){
+   if(a[j]===AYADAN)return null;if(a[j]===EMPTY){a[j]=X;changed=true;}
+  }
+  for(const cells of groups){
+   let stars=0;const open=[];
+   for(const i of cells){if(a[i]===AYADAN)stars++;else if(a[i]===EMPTY)open.push(i);}
+   const need=k-stars;if(need<0||need>open.length)return null;
+   if(need===0){for(const i of open){a[i]=X;changed=true;}}
+   else if(need===open.length){for(const i of open){a[i]=AYADAN;changed=true;}}
+   else if(need===2&&open.length<=7){
+    for(const i of open)if(!open.some(j=>i!==j&&!neighbors[i].includes(j))){a[i]=X;changed=true;}
+   }
+  }
+  for(let g=0;g<groups.length;g++){
+   let count=0;const open=[];for(const i of groups[g]){if(a[i]===AYADAN)count++;else if(a[i]===EMPTY)open.push(i);}
+   const need=k-count;if(!need||!open.length)continue;
+   for(const h of memberships[open[0]]){
+    if(h===g||!open.every(i=>memberships[i].includes(h)))continue;
+    let existing=0;for(const i of groups[h])if(a[i]===AYADAN)existing++;
+    if(k-existing===need)for(const i of groups[h])if(a[i]===EMPTY&&!memberships[i].includes(g)){a[i]=X;changed=true;}
+   }
+  }
+ }
+ return a;
+}
+function chooseHint(s,p){
+ const fallback=p.solution.find(i=>s.marks[i]!==AYADAN);if(p.id<40||fallback===undefined)return fallback;
+ const m=hintModel(p),base=deduceHint(m,Uint8Array.from(s.marks,v=>v===AYADAN?AYADAN:EMPTY));
+ if(!base)return fallback;
+ let best=fallback,bestScore=-1;
+ for(const i of p.solution){
+  // Skip positions already inferable, so limited hints target the next bottleneck.
+  if(base[i]===AYADAN)continue;
+  const trial=base.slice();trial[i]=AYADAN;const result=deduceHint(m,trial);if(!result)continue;
+  let score=0;for(const mark of result)if(mark===AYADAN)score++;
+  if(score>bestScore){best=i;bestScore=score;}
+ }
+ return best;
+}
+function hint(s,p){if(s.status!=='playing'||s.hints<=0)return {type:'ignored'};const i=chooseHint(s,p);if(i===undefined)return {type:'ignored'};s.hints--;return {...place(s,p,i),hint:true};}
 const api={EMPTY,X,AYADAN,rules,starter,starters,unlocked,canPlay,validCompletions,create,restore,mark,place,hint,finished};if(typeof module!=='undefined')module.exports=api;else root.PuzzleEngine=api;
 })(typeof window!=='undefined'?window:globalThis);
 

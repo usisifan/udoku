@@ -1,0 +1,36 @@
+udoku web 0.4.1 — hints that open useful deduction paths (2026-10-18 KST)
+
+Problem: later-level hints revealed the first unplaced answer by board order,
+without evaluating which clue would help the player continue deductions.
+
+For levels 40–100, rank candidate clues by the number of Ayadan inferable after
+that clue using quotas, neighboring-cell exclusions, non-touching partners and
+locked row/column/region sets. The evaluator performs no DFS. It starts with
+confirmed Ayadan only and ignores player X notes, so an incorrect note cannot
+mislead it. Clues already deducible are skipped when a later bottleneck remains.
+One use reveals exactly one character and consumes exactly one hint. Early-level
+hint behavior, all allowances, and all starting positions are unchanged.
+
+Verification: 23 Node tests passed. The separate solver completes every one of
+the 61 later boards with propagation only (one node, no branching) after the
+actual engine hints, within each tier's current limit. Maximum hints along these
+verified paths: 40–59: 4/4; 60–79: 4/5; 80–100: 6/6. Level 40 needs at most three.
+Exact positions and hashes are in hint-paths-v0.4.1.json; reproduce with
+node scripts/verify-hint-paths.mjs. This proves a route using the implemented
+logical rules, not that each deduction is obvious to every human player.
+
+All 89 isolated Chromium/mobile UI checks passed, including saved-resource use,
+offline loading, narrow layouts, and level-100 completion badges. Physical phones
+were not tested. Development Electron runtime flags are test-only; production
+sandbox settings were not changed. The initial sandbox-account ACL launch failed;
+the subsequent test run completed and its report is web-v0.4.1.json.
+
+Compatibility: no puzzle data, solution, hash, starting clue, save format/key,
+resource balance, or completion record changes. Ongoing rounds use the new hint
+selection when another hint is available; earlier uses are not refunded. The
+fresh-round path result does not guarantee that every old spent-hint sequence
+still has a sufficient remaining budget.
+
+Only usisifan/udoku (repository ID 1423187970) web/source is updated. Windows
+release 0.2.0 and all unrelated repositories are unchanged. Cache v0.4.1 activates
+normally after old game tabs close; active games are not forcibly refreshed.
