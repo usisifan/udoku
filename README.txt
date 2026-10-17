@@ -1,9 +1,11 @@
-시시의 퍼즐 목장 0.2.0
+시시의 퍼즐 목장 · udoku 웹앱 0.3.0
+USISI
+Windows 다운로드 배포본은 0.2.0을 유지합니다.
 우시시와 아야단의 오리지널 논리 퍼즐 · 100레벨
 
 바로 플레이
-  모바일·PC 웹앱: https://usisifan.github.io/ushishi-puzzle-farm/
-  Windows 다운로드: https://github.com/usisifan/ushishi-puzzle-farm/releases/latest
+  모바일·PC 웹앱: https://usisifan.github.io/udoku/
+  Windows 다운로드: https://github.com/usisifan/udoku/releases/latest
 
 Windows 프로그램
   Windows 10/11, 64비트 PC용입니다.
@@ -22,6 +24,10 @@ Windows 프로그램
   웹앱에는 회원 가입이나 로그인, 광고, 분석 추적 도구가 없습니다.
 
 첫 화면과 진행
+  화면: 자동 / 어둡게 / 밝게 버튼으로 바꿀 수 있습니다. 자동은 기기 설정을 따릅니다.
+  어두운 화면은 배경과 칸의 채도를 낮춘 전용 색상을 사용합니다.
+  진행 초기화 버튼은 확인 후 이 게임의 완료 기록과 풀던 문제만 초기화합니다.
+  초기화해도 화면과 소리 설정은 유지됩니다.
   게임 시작 / 이어서 풀기 버튼으로 플레이합니다.
   첫 레벨은 4×4이며, 모든 라운드에 정답 아야단 한 마리가 먼저 공개됩니다.
   시작 아야단은 목숨이나 힌트를 소모하지 않습니다.

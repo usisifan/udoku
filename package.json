@@ -1,10 +1,10 @@
 {
-  "name": "ushishi-puzzle-farm",
-  "version": "0.2.0",
+  "name": "udoku",
+  "version": "0.3.0",
   "private": true,
   "description": "우시시와 아야단의 오리지널 논리 퍼즐",
   "main": "main.cjs",
-  "author": "Ushishi Puzzle Project",
+  "author": "USISI Puzzle Project",
   "license": "UNLICENSED",
   "scripts": {
     "start": "electron .",

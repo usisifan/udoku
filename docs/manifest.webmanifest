@@ -1,7 +1,7 @@
 {
   "id": "./",
   "name": "시시의 퍼즐 목장",
-  "short_name": "시시퍼즐",
+  "short_name": "udoku",
   "description": "우시시와 함께하는 아야단 논리 퍼즐 100레벨",
   "lang": "ko",
   "start_url": "./",
@@ -10,7 +10,17 @@
   "background_color": "#f4f9ff",
   "theme_color": "#f4f9ff",
   "icons": [
-    {"src":"assets/app-icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
-    {"src":"assets/app-icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+    {
+      "src": "assets/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }

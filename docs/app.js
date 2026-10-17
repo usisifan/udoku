@@ -2,18 +2,20 @@
 'use strict';
 const E=window.PuzzleEngine,levels=window.LEVELS,$=id=>document.getElementById(id),SAVE_KEY='ushishi-puzzle-farm-progress-v2';
 const palette=['#32a4e6','#61bc64','#e8be43','#ff8851','#ef5d77','#9164dc','#37bfc2','#e96fab','#5369b6','#98b956','#be8950','#6b9db7','#bc5870','#549c7f','#cd83bf','#8a79aa','#d79c42','#66b8a7','#a66f54','#809663'];
+const darkPalette=['#3f7592','#56805d','#9a823f','#aa7150','#a8596c','#735d9d','#3f8589','#9c6484','#52658f','#74854e','#8b7152','#5c788b','#8b4f64','#477867','#8b638d','#6c6484','#9a793c','#537f75','#896251','#727b50'];
 const names=['파랑','초록','노랑','주황','코랄','보라','청록','분홍','남색','연두','황토','회청','자주','진초록','연보라','회보라','호박','민트','갈색','올리브'];
-let store={v:1,rounds:{},completed:{},currentLevel:1,sound:false},puzzle,state,paused=false,lastTick=performance.now(),cells=[],focusIndex=0,gesture=null,pendingTap=null,tapTimer=null,toastTimer=null,saveTimer=null,saveErrorShown=false,audio=null,modalKind='',screen='home',zoomed=false,panning=false;
+let store={v:1,rounds:{},completed:{},currentLevel:1,sound:false},puzzle,state,paused=false,lastTick=performance.now(),cells=[],focusIndex=0,gesture=null,pendingTap=null,tapTimer=null,toastTimer=null,saveTimer=null,saveErrorShown=false,audio=null,modalKind='',screen='home',zoomed=false,panning=false,resetting=false,resetTask=null;
 const chapters=[[1,9,'첫 번째 발걸음'],[10,24,'넓어진 목장'],[25,39,'한 번 더 생각하기'],[40,59,'이제 두 마리씩'],[60,79,'깊어지는 퍼즐'],[80,100,'마지막 도전']];
 function formatTime(ms){const s=Math.floor(ms/1000);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
 function tick(){const now=performance.now();if(state&&state.status==='playing'&&!paused)state.elapsed+=Math.max(0,now-lastTick);lastTick=now;if(state)$('time').textContent=formatTime(state.elapsed);}
 function toast(message){clearTimeout(toastTimer);$('toast').textContent=message;$('toast').classList.add('visible');toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),2800);}
-async function persist(){if(!state)return;tick();store.rounds[puzzle.id]={...state,marks:state.marks.slice()};store.currentLevel=puzzle.id;
- try{if(window.desktop)await window.desktop.save(store);else localStorage.setItem(SAVE_KEY,JSON.stringify(store));}
+async function writeStore(value){if(window.desktop)await window.desktop.save(value);else localStorage.setItem(SAVE_KEY,JSON.stringify(value));}
+async function persist(){if(!state||resetting)return;tick();store.rounds[puzzle.id]={...state,marks:state.marks.slice()};store.currentLevel=puzzle.id;
+ try{await writeStore(store);}
  catch(err){if(!saveErrorShown){saveErrorShown=true;toast('진행 상황을 저장하지 못했어요. 저장 공간을 확인해 주세요.');}}
 }
 function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(persist,100);}
-window.flushGameSave=()=>{cancelTap(true);clearTimeout(saveTimer);return persist();};
+window.flushGameSave=()=>{if(resetTask)return resetTask;cancelTap(true);clearTimeout(saveTimer);return persist();};
 function sound(kind){
  if(!store.sound)return;
  try{audio??=new AudioContext();audio.resume();const frequencies=kind==='mistake'?[180]:kind==='won'?[523,659,784]:kind==='mark'?[330]:[660];
@@ -45,7 +47,7 @@ let colors=[];
 function createBoard(){
  const board=$('board');board.replaceChildren();zoomed=false;panning=false;$('board-viewport').className='board-viewport';$('board-viewport').style.setProperty('--zoom-size',(puzzle.n*40)+'px');$('zoom-board').textContent='확대';$('zoom-board').setAttribute('aria-pressed','false');$('zoom-board').disabled=puzzle.n<10;$('pan-board').hidden=true;board.style.setProperty('--n',puzzle.n);board.style.setProperty('--gap',puzzle.n>=16?'3px':puzzle.n>=12?'4px':'5px');board.setAttribute('aria-rowcount',puzzle.n);board.setAttribute('aria-colcount',puzzle.n);colors=colorAssignment();cells=[];focusIndex=0;
  for(let i=0;i<puzzle.n*puzzle.n;i++){
-  const cell=document.createElement('button');cell.className='cell';cell.type='button';cell.dataset.index=i;cell.setAttribute('role','gridcell');cell.tabIndex=i===0?0:-1;cell.style.setProperty('--region',palette[colors[puzzle.regions[i]]]);
+  const cell=document.createElement('button');cell.className='cell';cell.type='button';cell.dataset.index=i;cell.setAttribute('role','gridcell');cell.tabIndex=i===0?0:-1;cell.style.setProperty('--region',palette[colors[puzzle.regions[i]]]);cell.style.setProperty('--region-dark',darkPalette[colors[puzzle.regions[i]]]);
   const cross=document.createElement('span');cross.className='x';cross.setAttribute('aria-hidden','true');const img=new Image();img.src='assets/ayadan.png';img.alt='';img.draggable=false;cell.append(cross,img);board.append(cell);cells.push(cell);
  }
  updateAll();
@@ -119,6 +121,21 @@ function updateHome(){
 function showHome(){cancelTap(true);tick();persist();paused=true;screen='home';gesture=null;if($('modal').open)$('modal').close();modalKind='';$('game-view').hidden=true;$('home-screen').hidden=false;updateHome();window.scrollTo(0,0);}
 function showGame(){screen='game';paused=false;lastTick=performance.now();$('home-screen').hidden=true;$('game-view').hidden=false;$('board-cover').hidden=true;window.scrollTo(0,0);}
 function beginGame(){if(state.status!=='playing')loadLevel(E.unlocked(store.completed,levels.length),true);showGame();}
+function resetPrompt(){
+ openModal('<div class="modal-inner center"><img class="modal-mascot" src="assets/ayadan.png" alt=""><h2 id="modal-title">진행 기록을 초기화할까요?</h2><p>이 기기의 완료 기록과 풀던 문제가 지워지고<br>1레벨부터 다시 시작해요.<br>화면 설정과 소리 설정은 유지돼요.</p><p id="reset-error" role="status" hidden></p><div class="modal-actions"><button class="secondary" id="reset-cancel">취소</button><button class="primary" id="reset-confirm">초기화</button></div></div>','reset');
+ $('reset-cancel').onclick=closeModal;$('reset-confirm').onclick=()=>{if(!resetTask)resetTask=resetProgress().finally(()=>{resetTask=null;});};$('reset-cancel').focus();
+}
+async function resetProgress(){
+ cancelTap(false);clearTimeout(saveTimer);gesture=null;tick();paused=true;resetting=true;
+ const previous={store,puzzle,state};$('reset-confirm').disabled=true;$('reset-cancel').disabled=true;$('reset-confirm').textContent='초기화 중';$('reset-error').hidden=true;
+ puzzle=levels[0];state=E.create(puzzle);store={v:1,rounds:{1:state},completed:{},currentLevel:1,sound:previous.store.sound};
+ try{
+  await writeStore(store);renderRules();createBoard();showHome();toast('진행 기록을 초기화했어요. 첫 목장부터 다시 시작해요.');
+ }catch{
+  ({store,puzzle,state}=previous);$('reset-error').textContent='저장하지 못했어요. 기록은 유지했으니 다시 시도해 주세요.';$('reset-error').hidden=false;
+  $('reset-confirm').disabled=false;$('reset-cancel').disabled=false;$('reset-confirm').textContent='초기화';
+ }finally{resetting=false;lastTick=performance.now();}
+}
 function openLevels(){
  const done=Object.keys(store.completed).length,next=E.unlocked(store.completed,levels.length);
  openModal('<div class="modal-inner"><div class="modal-top"><h2 id="modal-title">차근차근, 다음 목장으로</h2><button class="close-modal" id="close-levels" aria-label="닫기">×</button></div><p>이전 레벨을 완료하면 다음 레벨이 열려요. 풀던 문제는 저장돼요.</p><div class="level-summary"><strong>'+done+' / 100 완료</strong><span class="tiny-label">'+next+'레벨까지 열림</span></div><div class="level-list">'+chapters.map(([a,b,title])=>'<section><div class="chapter-title"><strong>'+title+'</strong><span>'+a+'–'+b+' · '+(a>=40?'각 2마리':'각 1마리')+'</span></div><div class="level-grid">'+Array.from({length:b-a+1},(_,j)=>{const id=a+j,locked=!E.canPlay(id,store.completed,levels.length);return '<button class="level-button'+(store.completed[id]?' done':'')+(id===puzzle.id?' current':'')+(locked?' locked':'')+'" data-level="'+id+'" '+(locked?'disabled ':'')+'aria-label="'+id+'레벨'+(locked?' 잠김':store.completed[id]?' 완료':' 도전 가능')+'">'+id+(locked?'<span class="lock-symbol" aria-hidden="true">🔒</span>':'')+'</button>';}).join('')+'</div></section>').join('')+'</div></div>','levels');
@@ -134,7 +151,7 @@ function showResult(won){
  $('result-levels').onclick=openLevels;$('result-next').onclick=()=>{const next=won&&puzzle.id<100?puzzle.id+1:puzzle.id;$('modal').close();loadLevel(next,true);};
 }
 function showAbout(){
- openModal('<div class="modal-inner"><div class="modal-top"><h2 id="modal-title">시시의 퍼즐 목장</h2><button class="close-modal" id="close-about" aria-label="닫기">×</button></div><p>우시시와 함께 아야단의 자리를 찾는 논리 퍼즐.</p><ul class="about-list"><li>100개의 문제는 기존 게임의 문제를 가져오지 않고 직접 생성했어요. 모든 문제의 구역 연결성과 정답이 하나임을 검증했습니다.</li><li>4×4부터 차근차근 커져요. 시작할 때 아야단 한 마리를 무료로 공개하며, 이전 레벨을 완료해야 다음 레벨이 열립니다. 1–39레벨은 각 1마리, 40–100레벨은 각 2마리를 찾아요. 레벨이 올라가면 보드가 커집니다.</li><li>드래그하거나 한 번 클릭하면 X를 표시해요. X에서 드래그를 시작하면 표시를 지울 수 있어요. 두 번 클릭하거나 톡톡 누르면 아야단을 놓습니다. 작은 화면의 큰 보드는 확대 후 화면 이동 버튼으로 살펴볼 수 있어요.</li><li>잘못 놓으면 목숨을 1회 잃어요. 찾은 아야단은 다시 지울 수 없어요. 힌트는 라운드마다 한 번 사용할 수 있어요.</li><li><span class="keycap">방향키</span> 이동 · <span class="keycap">X</span> 표시 · <span class="keycap">Enter</span> 아야단 · <span class="keycap">Esc</span> 일시정지 · <span class="keycap">F11</span> 전체 화면</li><li>PC 프로그램은 오프라인에서 실행됩니다. 웹앱은 첫 로딩 후 오프라인으로 이용할 수 있습니다. 기록은 현재 기기·브라우저에 자동 저장되며 서로 동기화되지 않습니다.</li></ul><p style="font-size:11px">캐릭터 원화: 사용자 제공 우시시·아야단 이미지<br>오리지널 퍼즐 100개 · 버전 0.2.0</p></div>','about');$('close-about').onclick=closeModal;
+ openModal('<div class="modal-inner"><div class="modal-top"><h2 id="modal-title">시시의 퍼즐 목장</h2><button class="close-modal" id="close-about" aria-label="닫기">×</button></div><p>우시시와 함께 아야단의 자리를 찾는 논리 퍼즐.</p><ul class="about-list"><li>100개의 문제는 기존 게임의 문제를 가져오지 않고 직접 생성했어요. 모든 문제의 구역 연결성과 정답이 하나임을 검증했습니다.</li><li>4×4부터 차근차근 커져요. 시작할 때 아야단 한 마리를 무료로 공개하며, 이전 레벨을 완료해야 다음 레벨이 열립니다. 1–39레벨은 각 1마리, 40–100레벨은 각 2마리를 찾아요. 레벨이 올라가면 보드가 커집니다.</li><li>드래그하거나 한 번 클릭하면 X를 표시해요. X에서 드래그를 시작하면 표시를 지울 수 있어요. 두 번 클릭하거나 톡톡 누르면 아야단을 놓습니다. 작은 화면의 큰 보드는 확대 후 화면 이동 버튼으로 살펴볼 수 있어요.</li><li>잘못 놓으면 목숨을 1회 잃어요. 찾은 아야단은 다시 지울 수 없어요. 힌트는 라운드마다 한 번 사용할 수 있어요.</li><li><span class="keycap">방향키</span> 이동 · <span class="keycap">X</span> 표시 · <span class="keycap">Enter</span> 아야단 · <span class="keycap">Esc</span> 일시정지 · <span class="keycap">F11</span> 전체 화면</li><li>PC 프로그램은 오프라인에서 실행됩니다. 웹앱은 첫 로딩 후 오프라인으로 이용할 수 있습니다. 기록은 현재 기기·브라우저에 자동 저장되며 서로 동기화되지 않습니다.</li></ul><p style="font-size:11px">캐릭터 원화: 사용자 제공 우시시·아야단 이미지<br>오리지널 퍼즐 100개 · 버전 0.3.0</p></div>','about');$('close-about').onclick=closeModal;
 }
 function confetti(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const host=$('confetti');host.replaceChildren();for(let i=0;i<36;i++){const el=document.createElement('i');el.style.left=Math.random()*100+'%';el.style.setProperty('--c',palette[i%8]);el.style.setProperty('--d',2+Math.random()*1.8+'s');el.style.setProperty('--r',Math.random()*180+'deg');host.append(el);}setTimeout(()=>host.replaceChildren(),4500);}
 function bind(){
@@ -165,14 +182,14 @@ function bind(){
   if(e.key==='ArrowLeft')next=Math.max(0,idx-1);else if(e.key==='ArrowRight')next=Math.min(cells.length-1,idx+1);else if(e.key==='ArrowUp')next=Math.max(0,idx-puzzle.n);else if(e.key==='ArrowDown')next=Math.min(cells.length-1,idx+puzzle.n);else if(e.key==='x'||e.key==='X'){e.preventDefault();cancelTap(false);paint(idx,state.marks[idx]===1?0:1);return;}else if(e.key==='Enter'||e.key===' '){e.preventDefault();place(idx);return;}else return;
   e.preventDefault();focusIndex=next;cells.forEach((c,i)=>c.tabIndex=i===next?0:-1);cells[next].focus({preventScroll:true});
  });
- $('home-play').onclick=beginGame;$('home-levels').onclick=openLevels;$('go-home').onclick=showHome;
+ $('home-play').onclick=beginGame;$('home-levels').onclick=openLevels;$('go-home').onclick=showHome;$('reset-progress').onclick=resetPrompt;
  $('zoom-board').onclick=()=>{zoomed=!zoomed;panning=false;$('board-viewport').classList.toggle('is-zoomed',zoomed);$('board-viewport').classList.remove('panning');$('zoom-board').textContent=zoomed?'축소':'확대';$('zoom-board').setAttribute('aria-pressed',String(zoomed));$('pan-board').hidden=!zoomed;$('pan-board').setAttribute('aria-pressed','false');};
  $('pan-board').onclick=()=>{cancelTap(false);gesture=null;panning=!panning;$('board-viewport').classList.toggle('panning',panning);$('pan-board').setAttribute('aria-pressed',String(panning));toast(panning?'보드를 밀어서 이동하세요. 표시하려면 화면 이동을 꺼 주세요.':'이제 칸에 표시할 수 있어요.');};
- $('install-help').onclick=()=>{openModal('<div class="modal-inner"><div class="modal-top"><h2 id="modal-title">홈 화면에서 바로 플레이</h2><button class="close-modal" id="close-install" aria-label="닫기">×</button></div><p><b>아이폰 · 아이패드</b><br>Safari에서 공유 버튼 → 홈 화면에 추가를 눌러 주세요.</p><p><b>안드로이드</b><br>Chrome 메뉴 → 홈 화면에 추가 또는 앱 설치를 눌러 주세요.</p><p>처음 접속해 게임 파일을 받은 뒤에는 오프라인에서도 플레이할 수 있어요. 기록은 기기와 브라우저마다 따로 저장돼요.</p></div>','install');$('close-install').onclick=closeModal;};
+ $('install-help').onclick=()=>{openModal('<div class="modal-inner"><div class="modal-top"><h2 id="modal-title">홈 화면에서 바로 플레이</h2><button class="close-modal" id="close-install" aria-label="닫기">×</button></div><p>설치는 선택이에요. 이 화면에서 바로 게임을 시작할 수 있어요.</p><p><b>아이폰 · 아이패드</b><br>Safari에서 공유 버튼 → 홈 화면에 추가를 눌러 주세요.</p><p><b>안드로이드</b><br>Chrome 메뉴 → 홈 화면에 추가 또는 앱 설치를 눌러 주세요.</p><p>설치 중 보안 경고가 나오면 설치를 중단하고 안내 문구를 확인해 주세요. 보호 기능을 끌 필요는 없어요.</p><p>처음 접속해 게임 파일을 받은 뒤에는 오프라인에서도 플레이할 수 있어요. 기록은 기기와 브라우저마다 따로 저장돼요.</p></div>','install');$('close-install').onclick=closeModal;};
  $('menu').onclick=openLevels;$('level-label').onclick=openLevels;$('pause').onclick=pauseGame;$('about').onclick=showAbout;$('restart').onclick=restartPrompt;
  $('hint').onclick=()=>{if(!paused){cancelTap(true);tick();takeResult(E.hint(state,puzzle));}};
  $('sound').onclick=()=>{store.sound=!store.sound;updateHUD();scheduleSave();if(store.sound)sound('placed');};
- $('modal').addEventListener('cancel',e=>{e.preventDefault();if(modalKind!=='result')closeModal();});
+ $('modal').addEventListener('cancel',e=>{e.preventDefault();if(modalKind!=='result'&&!resetting)closeModal();});
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('modal').open){e.preventDefault();pauseGame();}});
  document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelTap(true);pauseGame();persist();}});
  window.addEventListener('blur',()=>{if(state?.status==='playing'&&!$('modal').open)pauseGame();});
@@ -183,7 +200,7 @@ function bind(){
  try{const saved=window.desktop?await window.desktop.load():JSON.parse(localStorage.getItem(SAVE_KEY)||'null');if(saved?.v===1){store={...store,...saved,rounds:saved.rounds&&typeof saved.rounds==='object'?saved.rounds:{},completed:saved.completed&&typeof saved.completed==='object'?saved.completed:{}};}}
  catch{}
  if(!Array.isArray(levels)||levels.length!==100){document.body.textContent='문제 파일을 읽지 못했어요. 프로그램 압축을 다시 풀어 주세요.';return;}
- store.completed=E.validCompletions(store,levels);bind();let initialLevel=Number(store.currentLevel);if(store.completed[initialLevel]&&store.rounds[initialLevel]?.status!=='playing')initialLevel=E.unlocked(store.completed,levels.length);loadLevel(E.canPlay(initialLevel,store.completed,levels.length)?initialLevel:E.unlocked(store.completed,levels.length));showHome();if(window.desktop){$('download-pc').hidden=true;$('install-help').hidden=true;}setInterval(tick,250);setInterval(()=>{if(state.status==='playing'&&!paused)persist();},5000);
+ store.completed=E.validCompletions(store,levels);bind();let initialLevel=Number(store.currentLevel);if(store.completed[initialLevel]&&store.rounds[initialLevel]?.status!=='playing')initialLevel=E.unlocked(store.completed,levels.length);loadLevel(E.canPlay(initialLevel,store.completed,levels.length)?initialLevel:E.unlocked(store.completed,levels.length));showHome();if(window.desktop){$('install-help').hidden=true;}setInterval(tick,250);setInterval(()=>{if(state.status==='playing'&&!paused)persist();},5000);
  window.__gameReady=true;
 })();
 })();

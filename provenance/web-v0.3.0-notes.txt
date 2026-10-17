@@ -1,0 +1,26 @@
+udoku web 0.3.0 verification — 2026-10-17
+
+Scope: web appearance, start-screen reset, USISI branding, project URL rename.
+Existing Windows 0.2.0 release files are retained. No Windows 0.3.0 build is claimed.
+Puzzle data, generator, solver, engine, and approved character assets are unchanged.
+
+Node engine tests: 13 passed.
+scripts/web-regression.cjs: 24 checks passed; web-v0.3.0.json records the results.
+An isolated Electron/Chromium profile served the real dist files over local HTTP.
+Dark/light/system themes, touch marks, white X, 390px and 320px layouts, reset
+confirmation/cancellation, failed-write rollback, saved progress, sequential
+unlocking, other-game storage/cache preservation, path migration, scoped service
+worker, and offline reload were checked. No renderer errors were reported.
+Dark start/play screens and reset confirmation were visually inspected.
+
+Test-only runtime flags: --no-sandbox --in-process-gpu --disable-gpu, required by
+this development environment. They are not added to the application defaults.
+These checks emulate a phone viewport; they do not certify physical Android or
+iPhone installation. A user reported a security block during home-screen/app
+installation. Device, browser, and full warning are pending; no resolution or
+security-provider approval is claimed. Protection settings were not weakened.
+
+Only the repository created for this game (GitHub repository ID 1423187970) is
+renamed from usisifan/ushishi-puzzle-farm to usisifan/udoku. Existing browser save
+key is retained for same-origin progress continuity. No account-root Pages site
+or other repository is used. Home-screen installation remains optional.
