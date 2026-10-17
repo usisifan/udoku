@@ -1,0 +1,42 @@
+udoku web 0.4.0 — campaign assistance tiers (2026-10-18 KST)
+
+Levels 1–39: 2 hints, 2 lives, 1 opening clue (unchanged).
+Levels 40–59: 4 hints, 3 lives, 3 opening clues.
+Levels 60–79: 5 hints, 3 lives, 4 opening clues.
+Levels 80–100: 6 hints, 3 lives, 5 opening clues.
+
+Openings keep the original given cell. Each additional clue comes from a different
+color region. Selection prioritizes a new board quarter, then the maximum distance
+from the closest selected clue. Stable solution-order ties make positions repeatable.
+All 61 later levels have distinct-color openings; the 3-clue group covers 3 quarters,
+and the 4/5-clue groups cover all 4. Every selection spans at least half the board in
+both axes. Exact indices and measurements are in openings-v0.4.0.json.
+Original puzzle data, IDs, hashes, solutions, and character images are unchanged.
+
+Save compatibility: round version 4 stores hintLimit and lifeLimit. Legacy versions
+1/2 had one hint; version 3 had two hints; all had two lives. Migration preserves
+prior hint uses and mistakes, adds the allowance difference once, and reveals the
+new starting cells. Other marks, elapsed time, historical completions/best results,
+unlocks, theme, sound, browser save key and origin remain intact. An X on a newly
+revealed correct opening cell becomes an Ayadan. Lost saves do not resurrect during
+engine restoration; starting a retry follows the existing retry behavior. If the
+new clues complete an active round, its result is recorded and the next level opens.
+
+Verification: 19 Node tests passed, including all 100 puzzles and 1,800 old-save
+combinations. 89 isolated Chromium/mobile UI checks passed (web-v0.4.0.json), covering
+band edges, dynamic counters/home/rules/retry text, full hint consumption, 3-mistake
+loss, preserved history, no refill on reload, migration-completed rounds, offline
+loading, and 320/390px layouts. Screenshots were visually inspected; narrow-phone
+counters were adjusted to fit three hearts. Physical phones were not tested.
+The duplicate footer rule sentence was removed; both navigation buttons remain.
+Level 100 now distinguishes locked, incomplete and star-marked completion. The
+badge uses the saved completion record, survives reload/replay, recognizes existing
+matching completions, and clears only on an explicit progress reset. Locked,
+unlocked, one-Ayadan-short, actual-win, old-save, replay and reset states passed UI
+checks. Light and dark screenshots show a readable badge on small mobile layouts.
+UI runtime flags --no-sandbox --in-process-gpu --disable-gpu are test-only due to
+this development environment; production sandbox settings were not changed.
+
+Distribution: web source and /docs only, in repository ID 1423187970 (usisifan/udoku).
+Windows 0.2.0 release artifacts and unrelated repositories remain untouched.
+Service-worker cache version is updated without forcing active game sessions to reload.

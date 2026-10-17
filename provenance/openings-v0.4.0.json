@@ -1,0 +1,1107 @@
+{
+  "version": "0.4.0",
+  "retainsOriginalGiven": true,
+  "puzzlesUnchanged": true,
+  "selection": "Distinct color regions; prioritize unrepresented quarters, then maximize nearest-clue distance; deterministic ties in original solution order.",
+  "checks": [
+    {
+      "level": 40,
+      "puzzleHash": "fcb9b3f5516f3b23da6d7a330adc8209bbb755dae785a51fbf116d01e4ec8dfc",
+      "hints": 4,
+      "lives": 3,
+      "opening": 3,
+      "indices": [
+        16,
+        195,
+        155
+      ],
+      "distinctRegions": 3,
+      "quarters": 3,
+      "rowSpan": 12,
+      "colSpan": 12,
+      "size": 14
+    },
+    {
+      "level": 41,
+      "puzzleHash": "0672774672c491e281f7da82eaeca12efff3cfa56a8864cd2074e4af8afca5ab",
+      "hints": 4,
+      "lives": 3,
+      "opening": 3,
+      "indices": [
+        58,
+        180,
+        25
+      ],
+      "distinctRegions": 3,
+      "quarters": 3,
+      "rowSpan": 11,
+      "colSpan": 10,
+      "size": 14
+    },
+    {
+      "level": 42,
+      "puzzleHash": "f616a4101c4d0af2e7b3606ef13fa91d77f1a0bc23db73feee61a135c33bd992",
+      "hints": 4,
+      "lives": 3,
+      "opening": 3,
+      "indices": [
+        106,
+        14,
+        7
+      ],
+      "distinctRegions": 3,
+      "quarters": 3,
+      "rowSpan": 7,
+      "colSpan": 8,
+      "size": 14
+    },
+    {
+      "level": 43,
+      "puzzleHash": "42d4e36ecfc6a3b419720975fcb9b67c8910f3214b056b0b546d6a49942e98d7",
+      "hints": 4,
+      "lives": 3,
+      "opening": 3,
+      "indices": [
+        146,
+        27,
+        1
+      ],
+      "distinctRegions": 3,
+      "quarters": 3,
+      "rowSpan": 10,
+      "colSpan": 12,
+      "size": 14
+    },
+    {
+      "level": 44,
+      "puzzleHash": "316da849317b5fc9422ea8d60ba7e10d43194bf0fa35e86bb82c3f54494da9f6",
+      "hints": 4,
+      "lives": 3,
+      "opening": 3,
+      "indices": [
+        104,
+        27,
+        194
+      ],
+      "distinctRegions": 3,
+      "quarters": 3,
+      "rowSpan": 12,
+      "colSpan": 7,
+      "size": 14
+    },
+    {
+      "level": 45,
+      "puzzleHash": "da70052ed93d624f740e6beba31df554beceb8f5b08a5cedf4220a0f22205c16",
+      "hints": 4,
+      "lives": 3,
+      "opening": 3,
+      "indices": [
+        170,
+        13,
+        194
+      ],
+      "distinctRegions": 3,
+      "quarters": 3,
+      "rowSpan": 13,
+      "colSpan": 11,
+      "size": 14
+    },
+    {
+      "level": 46,
+      "puzzleHash": "3c68290f717bf2fbf9448281128a917cbdb906ee87cd9cca6158c47f319424e5",
+      "hints": 4,
+      "lives": 3,
+      "opening": 3,
+      "indices": [
+        25,
+        169,
+        29
+      ],
+      "distinctRegions": 3,
+      "quarters": 3,
+      "rowSpan": 11,
+      "colSpan": 10,
+      "size": 14
+    },
+    {
+      "level": 47,
+      "puzzleHash": "bb336d61e2bd9b4941cc26688f997d9dc1cd92d308755aba581ea43fcf0e39c1",
+      "hints": 4,
+      "lives": 3,
+      "opening": 3,
+      "indices": [
+        37,
+        185,
+        181
+      ],
+      "distinctRegions": 3,
+      "quarters": 3,
+      "rowSpan": 11,
+      "colSpan": 10,
+      "size": 14
+    },
+    {
+      "level": 48,
+      "puzzleHash": "d9fb50edb4895371450d67587aa89acdf8db5ec7397bb8d357ff0c2b921ee6e8",
+      "hints": 4,
+      "lives": 3,
+      "opening": 3,
+      "indices": [
+        165,
+        2,
+        182
+      ],
+      "distinctRegions": 3,
+      "quarters": 3,
+      "rowSpan": 13,
+      "colSpan": 11,
+      "size": 14
+    },
+    {
+      "level": 49,
+      "puzzleHash": "980d93f70f146cf7c70ea9dae2812f6ead9d27959a1a70cd2988f4f5eaa0030b",
+      "hints": 4,
+      "lives": 3,
+      "opening": 3,
+      "indices": [
+        26,
+        169,
+        0
+      ],
+      "distinctRegions": 3,
+      "quarters": 3,
+      "rowSpan": 12,
+      "colSpan": 12,
+      "size": 14
+    },
+    {
+      "level": 50,
+      "puzzleHash": "41a53ac995c1ad602b078f4c6d176b97b024ec2ee760cf5e40b96906503bbd7a",
+      "hints": 4,
+      "lives": 3,
+      "opening": 3,
+      "indices": [
+        172,
+        10,
+        195
+      ],
+      "distinctRegions": 3,
+      "quarters": 3,
+      "rowSpan": 13,
+      "colSpan": 9,
+      "size": 14
+    },
+    {
+      "level": 51,
+      "puzzleHash": "f0c47454caafa1ebc5fad3fc3ed4ab18e5af3daa6299d53c926ba614fb9c8a12",
+      "hints": 4,
+      "lives": 3,
+      "opening": 3,
+      "indices": [
+        137,
+        14,
+        169
+      ],
+      "distinctRegions": 3,
+      "quarters": 3,
+      "rowSpan": 11,
+      "colSpan": 11,
+      "size": 14
+    },
+    {
+      "level": 52,
+      "puzzleHash": "4e42b7b64de2bf811bad29b81f2322d9fd0b77b3e11ce198bd0bc0c962d90772",
+      "hints": 4,
+      "lives": 3,
+      "opening": 3,
+      "indices": [
+        107,
+        0,
+        141
+      ],
+      "distinctRegions": 3,
+      "quarters": 3,
+      "rowSpan": 10,
+      "colSpan": 9,
+      "size": 14
+    },
+    {
+      "level": 53,
+      "puzzleHash": "65c5bc5e98d8e78859f424b2c33db15e0ba2a92aa4f79b8785cf15f3b756989d",
+      "hints": 4,
+      "lives": 3,
+      "opening": 3,
+      "indices": [
+        10,
+        185,
+        14
+      ],
+      "distinctRegions": 3,
+      "quarters": 3,
+      "rowSpan": 13,
+      "colSpan": 10,
+      "size": 14
+    },
+    {
+      "level": 54,
+      "puzzleHash": "fbfb7a802bb84b8c6cdb32450385719dc1edc20dfc909563a2e820cbbcb3c667",
+      "hints": 4,
+      "lives": 3,
+      "opening": 3,
+      "indices": [
+        9,
+        140,
+        178
+      ],
+      "distinctRegions": 3,
+      "quarters": 3,
+      "rowSpan": 12,
+      "colSpan": 10,
+      "size": 14
+    },
+    {
+      "level": 55,
+      "puzzleHash": "88058a7280ce2914ab948410e7c1a748448b7c9d6f4eab834ca430fccc71447b",
+      "hints": 4,
+      "lives": 3,
+      "opening": 3,
+      "indices": [
+        21,
+        182,
+        180
+      ],
+      "distinctRegions": 3,
+      "quarters": 3,
+      "rowSpan": 12,
+      "colSpan": 12,
+      "size": 14
+    },
+    {
+      "level": 56,
+      "puzzleHash": "f81dbabd55c5798c1f22f89e1998df52ff90c44225658114c02c0bb62544b6c2",
+      "hints": 4,
+      "lives": 3,
+      "opening": 3,
+      "indices": [
+        163,
+        42,
+        13
+      ],
+      "distinctRegions": 3,
+      "quarters": 3,
+      "rowSpan": 11,
+      "colSpan": 13,
+      "size": 14
+    },
+    {
+      "level": 57,
+      "puzzleHash": "4bb6ee433ffba201226ef24482147b5d3f6ca4b2a30fb1d8f37a7e405d3f458c",
+      "hints": 4,
+      "lives": 3,
+      "opening": 3,
+      "indices": [
+        55,
+        126,
+        191
+      ],
+      "distinctRegions": 3,
+      "quarters": 3,
+      "rowSpan": 10,
+      "colSpan": 13,
+      "size": 14
+    },
+    {
+      "level": 58,
+      "puzzleHash": "48dc058e9e0a0c67d7e515b98dc86af9102554f0cbd621ede9dbc95fbeb7024d",
+      "hints": 4,
+      "lives": 3,
+      "opening": 3,
+      "indices": [
+        125,
+        0,
+        183
+      ],
+      "distinctRegions": 3,
+      "quarters": 3,
+      "rowSpan": 13,
+      "colSpan": 13,
+      "size": 14
+    },
+    {
+      "level": 59,
+      "puzzleHash": "24dd68983ff27ec6b60e4b7ff29121461b6744987858d9a5a9cb938538265844",
+      "hints": 4,
+      "lives": 3,
+      "opening": 3,
+      "indices": [
+        21,
+        169,
+        153
+      ],
+      "distinctRegions": 3,
+      "quarters": 3,
+      "rowSpan": 11,
+      "colSpan": 12,
+      "size": 14
+    },
+    {
+      "level": 60,
+      "puzzleHash": "0d9594b64610e4ffa2b1202239f9ff147da27612d9057d7d63985d8aa8298750",
+      "hints": 5,
+      "lives": 3,
+      "opening": 4,
+      "indices": [
+        57,
+        255,
+        192,
+        1
+      ],
+      "distinctRegions": 4,
+      "quarters": 4,
+      "rowSpan": 15,
+      "colSpan": 15,
+      "size": 16
+    },
+    {
+      "level": 61,
+      "puzzleHash": "773c8fc86b42942e6a4af2152139fbb96088978ceadc6b1be17bfdcea10c1a42",
+      "hints": 5,
+      "lives": 3,
+      "opening": 4,
+      "indices": [
+        237,
+        1,
+        242,
+        76
+      ],
+      "distinctRegions": 4,
+      "quarters": 4,
+      "rowSpan": 15,
+      "colSpan": 12,
+      "size": 16
+    },
+    {
+      "level": 62,
+      "puzzleHash": "89e98c4501f284db22da08740773b7f5112c4c4753ec4279c7c94cbb6acb6d89",
+      "hints": 5,
+      "lives": 3,
+      "opening": 4,
+      "indices": [
+        231,
+        17,
+        94,
+        223
+      ],
+      "distinctRegions": 4,
+      "quarters": 4,
+      "rowSpan": 13,
+      "colSpan": 14,
+      "size": 16
+    },
+    {
+      "level": 63,
+      "puzzleHash": "bbe16ac02653831892755dabb24936d91da521e219cf0b9985b424e22771588a",
+      "hints": 5,
+      "lives": 3,
+      "opening": 4,
+      "indices": [
+        133,
+        30,
+        191,
+        65
+      ],
+      "distinctRegions": 4,
+      "quarters": 4,
+      "rowSpan": 10,
+      "colSpan": 14,
+      "size": 16
+    },
+    {
+      "level": 64,
+      "puzzleHash": "0b2b99abb6b7ce63dc6ec069aeea2a84fc38416a3831a0ce6a435cf873513ef6",
+      "hints": 5,
+      "lives": 3,
+      "opening": 4,
+      "indices": [
+        125,
+        1,
+        179,
+        254
+      ],
+      "distinctRegions": 4,
+      "quarters": 4,
+      "rowSpan": 15,
+      "colSpan": 13,
+      "size": 16
+    },
+    {
+      "level": 65,
+      "puzzleHash": "c6e36c52411df826dd377106c572b1249458cb80ecbabe4cf380f89a55d5c3fa",
+      "hints": 5,
+      "lives": 3,
+      "opening": 4,
+      "indices": [
+        102,
+        255,
+        30,
+        177
+      ],
+      "distinctRegions": 4,
+      "quarters": 4,
+      "rowSpan": 14,
+      "colSpan": 14,
+      "size": 16
+    },
+    {
+      "level": 66,
+      "puzzleHash": "248f326a9e698cf4509a1edc82dbf123d1ab32a73eb44916827428f01228ba14",
+      "hints": 5,
+      "lives": 3,
+      "opening": 4,
+      "indices": [
+        51,
+        190,
+        241,
+        13
+      ],
+      "distinctRegions": 4,
+      "quarters": 4,
+      "rowSpan": 15,
+      "colSpan": 13,
+      "size": 16
+    },
+    {
+      "level": 67,
+      "puzzleHash": "e61f75454e1bd2943d31a4516cad1d07ffbbca5c219de29fe3e9e619275c1f7c",
+      "hints": 5,
+      "lives": 3,
+      "opening": 4,
+      "indices": [
+        225,
+        14,
+        255,
+        51
+      ],
+      "distinctRegions": 4,
+      "quarters": 4,
+      "rowSpan": 15,
+      "colSpan": 14,
+      "size": 16
+    },
+    {
+      "level": 68,
+      "puzzleHash": "f83913df296b0ea0d871ef2bc64691585c922ee80cbacccb8183933e1253ffa8",
+      "hints": 5,
+      "lives": 3,
+      "opening": 4,
+      "indices": [
+        150,
+        31,
+        223,
+        49
+      ],
+      "distinctRegions": 4,
+      "quarters": 4,
+      "rowSpan": 12,
+      "colSpan": 14,
+      "size": 16
+    },
+    {
+      "level": 69,
+      "puzzleHash": "e9d6b969819f75be6752a0a248a1bf9d1e1fdf191d582c9a1a7068fbb5949108",
+      "hints": 5,
+      "lives": 3,
+      "opening": 4,
+      "indices": [
+        156,
+        3,
+        176,
+        13
+      ],
+      "distinctRegions": 4,
+      "quarters": 4,
+      "rowSpan": 11,
+      "colSpan": 13,
+      "size": 16
+    },
+    {
+      "level": 70,
+      "puzzleHash": "5e51d8d307b869227606b9c2f7f1fcad0ec9fde052a9bf3765d1ad6fedc567d5",
+      "hints": 5,
+      "lives": 3,
+      "opening": 4,
+      "indices": [
+        232,
+        0,
+        77,
+        131
+      ],
+      "distinctRegions": 4,
+      "quarters": 4,
+      "rowSpan": 14,
+      "colSpan": 13,
+      "size": 16
+    },
+    {
+      "level": 71,
+      "puzzleHash": "226179d585ae29a1e0e5c8d1e138178303f47c887daa772a6326321305d797af",
+      "hints": 5,
+      "lives": 3,
+      "opening": 4,
+      "indices": [
+        36,
+        254,
+        209,
+        110
+      ],
+      "distinctRegions": 4,
+      "quarters": 4,
+      "rowSpan": 13,
+      "colSpan": 13,
+      "size": 16
+    },
+    {
+      "level": 72,
+      "puzzleHash": "912cf938315067f2cad13aeacd03398ad15227fe1aa053af15354a8e6c29c412",
+      "hints": 5,
+      "lives": 3,
+      "opening": 4,
+      "indices": [
+        164,
+        31,
+        206,
+        4
+      ],
+      "distinctRegions": 4,
+      "quarters": 4,
+      "rowSpan": 12,
+      "colSpan": 11,
+      "size": 16
+    },
+    {
+      "level": 73,
+      "puzzleHash": "6195eb1d3adfdcc7b4949c1d063b1526bde98c38c78a578157cd3b4f1c4f6bfd",
+      "hints": 5,
+      "lives": 3,
+      "opening": 4,
+      "indices": [
+        105,
+        241,
+        32,
+        238
+      ],
+      "distinctRegions": 4,
+      "quarters": 4,
+      "rowSpan": 13,
+      "colSpan": 14,
+      "size": 16
+    },
+    {
+      "level": 74,
+      "puzzleHash": "e84a4e95c832f25dff3f0c1d146a61fbfc1a028cb4a0d68f7951e599844812a8",
+      "hints": 5,
+      "lives": 3,
+      "opening": 4,
+      "indices": [
+        226,
+        29,
+        0,
+        239
+      ],
+      "distinctRegions": 4,
+      "quarters": 4,
+      "rowSpan": 14,
+      "colSpan": 15,
+      "size": 16
+    },
+    {
+      "level": 75,
+      "puzzleHash": "42f38f8b2b273e8a158a2983710da342dc2abd1f09590db47f962dcff6b123bd",
+      "hints": 5,
+      "lives": 3,
+      "opening": 4,
+      "indices": [
+        161,
+        31,
+        236,
+        22
+      ],
+      "distinctRegions": 4,
+      "quarters": 4,
+      "rowSpan": 13,
+      "colSpan": 14,
+      "size": 16
+    },
+    {
+      "level": 76,
+      "puzzleHash": "d99361f45cc0400bdaae15ffc6ff4e43e0ba6da7f4352a9e3fd24fea1fbf873b",
+      "hints": 5,
+      "lives": 3,
+      "opening": 4,
+      "indices": [
+        218,
+        17,
+        14,
+        160
+      ],
+      "distinctRegions": 4,
+      "quarters": 4,
+      "rowSpan": 13,
+      "colSpan": 14,
+      "size": 16
+    },
+    {
+      "level": 77,
+      "puzzleHash": "3526f047f3f42cf2f8517e6fcc150daa4b998969df7001c3b193a70c28cf88c6",
+      "hints": 5,
+      "lives": 3,
+      "opening": 4,
+      "indices": [
+        82,
+        254,
+        30,
+        224
+      ],
+      "distinctRegions": 4,
+      "quarters": 4,
+      "rowSpan": 14,
+      "colSpan": 14,
+      "size": 16
+    },
+    {
+      "level": 78,
+      "puzzleHash": "d55db4276578ac9e892c995e8c94fd3ff5a9a54022544bc51de718acbb49ef6c",
+      "hints": 5,
+      "lives": 3,
+      "opening": 4,
+      "indices": [
+        71,
+        224,
+        175,
+        31
+      ],
+      "distinctRegions": 4,
+      "quarters": 4,
+      "rowSpan": 13,
+      "colSpan": 15,
+      "size": 16
+    },
+    {
+      "level": 79,
+      "puzzleHash": "f28ad006ea137d0f24d6c3cc7e6c2787ea5eeedd1d7b100206ce5284ac858b6d",
+      "hints": 5,
+      "lives": 3,
+      "opening": 4,
+      "indices": [
+        166,
+        15,
+        17,
+        222
+      ],
+      "distinctRegions": 4,
+      "quarters": 4,
+      "rowSpan": 13,
+      "colSpan": 14,
+      "size": 16
+    },
+    {
+      "level": 80,
+      "puzzleHash": "4619ba7f8e317bd076b546461cba93494272547b22fb0e05a04f10325cba798a",
+      "hints": 6,
+      "lives": 3,
+      "opening": 5,
+      "indices": [
+        210,
+        19,
+        301,
+        82,
+        378
+      ],
+      "distinctRegions": 5,
+      "quarters": 4,
+      "rowSpan": 18,
+      "colSpan": 18,
+      "size": 20
+    },
+    {
+      "level": 81,
+      "puzzleHash": "ca9b287c3f93cbb28e9f8017e63fee47b350688e686bc8590f388d4ecd8f26ab",
+      "hints": 6,
+      "lives": 3,
+      "opening": 5,
+      "indices": [
+        269,
+        38,
+        81,
+        299,
+        362
+      ],
+      "distinctRegions": 5,
+      "quarters": 4,
+      "rowSpan": 17,
+      "colSpan": 18,
+      "size": 20
+    },
+    {
+      "level": 82,
+      "puzzleHash": "34f9af4fb81b7a0377305e981a8c5dd2bef1126f2ea1bdcf70e07c104b209133",
+      "hints": 6,
+      "lives": 3,
+      "opening": 5,
+      "indices": [
+        113,
+        360,
+        399,
+        141,
+        268
+      ],
+      "distinctRegions": 5,
+      "quarters": 4,
+      "rowSpan": 14,
+      "colSpan": 19,
+      "size": 20
+    },
+    {
+      "level": 83,
+      "puzzleHash": "4b6101fb2a982b49efd1ccc0c3720902730b9f145ad1a9cdd4539803f149b6e2",
+      "hints": 6,
+      "lives": 3,
+      "opening": 5,
+      "indices": [
+        124,
+        278,
+        16,
+        367,
+        300
+      ],
+      "distinctRegions": 5,
+      "quarters": 4,
+      "rowSpan": 18,
+      "colSpan": 18,
+      "size": 20
+    },
+    {
+      "level": 84,
+      "puzzleHash": "b4850757f4babdc453e1654cf6a0b53aaf9705ba6ba04a2a5dc34edef89f3d95",
+      "hints": 6,
+      "lives": 3,
+      "opening": 5,
+      "indices": [
+        157,
+        360,
+        1,
+        391,
+        167
+      ],
+      "distinctRegions": 5,
+      "quarters": 4,
+      "rowSpan": 19,
+      "colSpan": 17,
+      "size": 20
+    },
+    {
+      "level": 85,
+      "puzzleHash": "67813cbfbc935db84984caa334f2769851f38a6a840a6b2f47d6e341a4012cd2",
+      "hints": 6,
+      "lives": 3,
+      "opening": 5,
+      "indices": [
+        353,
+        40,
+        39,
+        301,
+        168
+      ],
+      "distinctRegions": 5,
+      "quarters": 4,
+      "rowSpan": 16,
+      "colSpan": 19,
+      "size": 20
+    },
+    {
+      "level": 86,
+      "puzzleHash": "af69abb2a033a5d04f35ec0ddffa70a888d9c1d35c4474ee99176f40c6ee999d",
+      "hints": 6,
+      "lives": 3,
+      "opening": 5,
+      "indices": [
+        229,
+        18,
+        80,
+        239,
+        363
+      ],
+      "distinctRegions": 5,
+      "quarters": 4,
+      "rowSpan": 18,
+      "colSpan": 19,
+      "size": 20
+    },
+    {
+      "level": 87,
+      "puzzleHash": "2587dc3e0fe0bb18a449a69ef56278a50def7f154f3b25e6c6eec4d9b3e7662a",
+      "hints": 6,
+      "lives": 3,
+      "opening": 5,
+      "indices": [
+        192,
+        380,
+        1,
+        379,
+        38
+      ],
+      "distinctRegions": 5,
+      "quarters": 4,
+      "rowSpan": 19,
+      "colSpan": 19,
+      "size": 20
+    },
+    {
+      "level": 88,
+      "puzzleHash": "d8834b0d232f71e880e1649f9b3c8d906acce1d236b256f446296fd5ee0c0192",
+      "hints": 6,
+      "lives": 3,
+      "opening": 5,
+      "indices": [
+        8,
+        394,
+        281,
+        78,
+        167
+      ],
+      "distinctRegions": 5,
+      "quarters": 4,
+      "rowSpan": 19,
+      "colSpan": 17,
+      "size": 20
+    },
+    {
+      "level": 89,
+      "puzzleHash": "05c0ca48ce28d9e8faf70cf9501f6e0bcda3e76b257602857b351e9dc4843324",
+      "hints": 6,
+      "lives": 3,
+      "opening": 5,
+      "indices": [
+        13,
+        381,
+        299,
+        40,
+        188
+      ],
+      "distinctRegions": 5,
+      "quarters": 4,
+      "rowSpan": 19,
+      "colSpan": 19,
+      "size": 20
+    },
+    {
+      "level": 90,
+      "puzzleHash": "d488cc57ab59eb2db006e70aeaa573f74bb9203c60f12abb85a16fe6c805a590",
+      "hints": 6,
+      "lives": 3,
+      "opening": 5,
+      "indices": [
+        286,
+        79,
+        24,
+        338,
+        171
+      ],
+      "distinctRegions": 5,
+      "quarters": 4,
+      "rowSpan": 15,
+      "colSpan": 15,
+      "size": 20
+    },
+    {
+      "level": 91,
+      "puzzleHash": "9f77023e4fb53231c381d9c5f389d2d29384743eefe950f2997e512562921a90",
+      "hints": 6,
+      "lives": 3,
+      "opening": 5,
+      "indices": [
+        256,
+        20,
+        321,
+        14,
+        128
+      ],
+      "distinctRegions": 5,
+      "quarters": 4,
+      "rowSpan": 16,
+      "colSpan": 16,
+      "size": 20
+    },
+    {
+      "level": 92,
+      "puzzleHash": "a9bc88e30837d46cce3ef9ce8c0501f5f895db8c51c19b2205db28ab2cd6ada3",
+      "hints": 6,
+      "lives": 3,
+      "opening": 5,
+      "indices": [
+        215,
+        20,
+        321,
+        19,
+        392
+      ],
+      "distinctRegions": 5,
+      "quarters": 4,
+      "rowSpan": 19,
+      "colSpan": 19,
+      "size": 20
+    },
+    {
+      "level": 93,
+      "puzzleHash": "f98f1d5334f5e2c34947cb0da40fcf85cda505a161063b8ca457ee462691b0fd",
+      "hints": 6,
+      "lives": 3,
+      "opening": 5,
+      "indices": [
+        351,
+        19,
+        64,
+        381,
+        173
+      ],
+      "distinctRegions": 5,
+      "quarters": 4,
+      "rowSpan": 19,
+      "colSpan": 18,
+      "size": 20
+    },
+    {
+      "level": 94,
+      "puzzleHash": "d8af2db4034af297baa83cd91f63a12940d46dcce32795d6f610234787fbf5da",
+      "hints": 6,
+      "lives": 3,
+      "opening": 5,
+      "indices": [
+        113,
+        381,
+        140,
+        354,
+        247
+      ],
+      "distinctRegions": 5,
+      "quarters": 4,
+      "rowSpan": 14,
+      "colSpan": 14,
+      "size": 20
+    },
+    {
+      "level": 95,
+      "puzzleHash": "3f6f8e9c2041eedc680186f5c1835de9c6ecb08c136401e89b9475e86a78a985",
+      "hints": 6,
+      "lives": 3,
+      "opening": 5,
+      "indices": [
+        261,
+        35,
+        338,
+        44,
+        349
+      ],
+      "distinctRegions": 5,
+      "quarters": 4,
+      "rowSpan": 16,
+      "colSpan": 17,
+      "size": 20
+    },
+    {
+      "level": 96,
+      "puzzleHash": "4093ff52a0127fe3af18abe744b6c9a8103c76ef22606ce8c1a4c168a601760a",
+      "hints": 6,
+      "lives": 3,
+      "opening": 5,
+      "indices": [
+        364,
+        79,
+        0,
+        338,
+        189
+      ],
+      "distinctRegions": 5,
+      "quarters": 4,
+      "rowSpan": 18,
+      "colSpan": 19,
+      "size": 20
+    },
+    {
+      "level": 97,
+      "puzzleHash": "7b4ae2296b341f9c9d92107fd8ca76736eea2e17fc02308753c98872170a2c85",
+      "hints": 6,
+      "lives": 3,
+      "opening": 5,
+      "indices": [
+        359,
+        1,
+        382,
+        38,
+        149
+      ],
+      "distinctRegions": 5,
+      "quarters": 4,
+      "rowSpan": 19,
+      "colSpan": 18,
+      "size": 20
+    },
+    {
+      "level": 98,
+      "puzzleHash": "e838e08e7627bbb4e350751a80e1a91a55ceb055085d5ae66b12ff702403b316",
+      "hints": 6,
+      "lives": 3,
+      "opening": 5,
+      "indices": [
+        140,
+        378,
+        17,
+        361,
+        211
+      ],
+      "distinctRegions": 5,
+      "quarters": 4,
+      "rowSpan": 18,
+      "colSpan": 18,
+      "size": 20
+    },
+    {
+      "level": 99,
+      "puzzleHash": "f3e41e770e2f259706b8d91aa24337c4a251b70c63b4d7c18ed90dc8e345fd8d",
+      "hints": 6,
+      "lives": 3,
+      "opening": 5,
+      "indices": [
+        248,
+        38,
+        60,
+        339,
+        360
+      ],
+      "distinctRegions": 5,
+      "quarters": 4,
+      "rowSpan": 17,
+      "colSpan": 19,
+      "size": 20
+    },
+    {
+      "level": 100,
+      "puzzleHash": "03e936ceb8ac2f008a22560b7e9022e7b8fa60da6a91708c5474f493ba957df4",
+      "hints": 6,
+      "lives": 3,
+      "opening": 5,
+      "indices": [
+        334,
+        20,
+        38,
+        382,
+        187
+      ],
+      "distinctRegions": 5,
+      "quarters": 4,
+      "rowSpan": 18,
+      "colSpan": 18,
+      "size": 20
+    }
+  ]
+}
