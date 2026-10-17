@@ -26,7 +26,7 @@ test('legacy completed and lost rounds keep their status and best-result history
  assert.deepEqual(E.validCompletions({completed:{1:completed},rounds:{1:won}},levels),{1:completed});
  const lost={...won,marks:E.create(p).marks,lives:0,status:'lost'};const r=E.restore(lost,p);assert.equal(r.status,'lost');assert.equal(E.hint(r,p).type,'ignored');
 });
-test('opening clues and resources match each campaign band',()=>{for(const p of levels){const expected=p.id<40?[2,2,1]:p.id<60?[4,3,3]:p.id<80?[5,3,4]:[6,3,5],s=E.create(p);assert.deepEqual([s.hints,s.lives,s.marks.filter(x=>x===2).length],expected);assert.equal(s.marks[p.given],2);for(const i of E.starters(p)){assert.ok(p.solution.includes(i));assert.equal(E.mark(s,i,0),false);assert.equal(E.place(s,p,i).type,'ignored');}}});
+test('opening clues and resources match each campaign band',()=>{for(const p of levels){const expected=p.id<40?[2,2,1]:p.id<60?[5,3,4]:p.id<80?[6,3,5]:[7,3,6],s=E.create(p);assert.deepEqual([s.hints,s.lives,s.marks.filter(x=>x===2).length],expected);assert.equal(s.marks[p.given],2);for(const i of E.starters(p)){assert.ok(p.solution.includes(i));assert.equal(E.mark(s,i,0),false);assert.equal(E.place(s,p,i).type,'ignored');}}});
 test('older saved rounds gain their opening clue without refunding hint or lives',()=>{const p=levels[0],s=E.create(p);s.marks[p.given]=1;s.hints=0;s.lives=1;const r=E.restore(s,p);assert.equal(r.marks[p.given],2);assert.equal(r.hints,0);assert.equal(r.lives,1);});
 test('all later openings span different regions and directions with stable positions',()=>{
  for(const p of levels.filter(p=>p.id>=40)){
@@ -61,7 +61,7 @@ test('later tiers allow exactly their hint budget and three mistakes without rel
 test('additional opening clues may finish a nearly complete old round without spending hints',()=>{
  const p=levels[39],missing=E.starters(p).find(i=>i!==p.given),marks=Array(p.n*p.n).fill(0);for(const i of p.solution)if(i!==missing)marks[i]=2;
  const saved={version:3,level:p.id,hash:p.sha256,marks,lives:1,hints:0,elapsed:67890,status:'playing'},r=E.restore(saved,p);
- assert.equal(r.status,'won');assert.equal(r.hints,2);assert.equal(r.lives,2);assert.equal(r.elapsed,67890);assert.deepEqual(E.restore(structuredClone(r),p),r);
+ assert.equal(r.status,'won');assert.equal(r.hints,3);assert.equal(r.lives,2);assert.equal(r.elapsed,67890);assert.deepEqual(E.restore(structuredClone(r),p),r);
 });
 test('sequential unlocking requires every earlier level and handles campaign end',()=>{assert.equal(E.unlocked({}),1);assert.equal(E.canPlay(2,{}),false);assert.equal(E.unlocked({1:{},3:{}}),2);assert.equal(E.canPlay(3,{1:{},3:{}}),false);assert.equal(E.canPlay(0,{}),false);assert.equal(E.canPlay(1.5,{}),false);const done=Object.fromEntries(levels.map(p=>[p.id,{}]));assert.equal(E.unlocked(done),100);assert.equal(E.canPlay(100,done),true);assert.equal(E.canPlay(101,done),false);});
 test('changed puzzle completions are rejected and old matching records migrate',()=>{const [a,b]=levels,saved={completed:{1:{elapsed:10,hash:'old'},2:{elapsed:20}},rounds:{2:{hash:b.sha256}}};assert.deepEqual(Object.keys(E.validCompletions(saved,levels)),['2']);assert.equal(E.validCompletions(saved,levels)[2].hash,b.sha256);saved.completed[1]={elapsed:0,hash:a.sha256};assert.equal(E.unlocked(E.validCompletions(saved,levels)),3);});

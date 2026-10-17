@@ -3,7 +3,7 @@ const {app,BrowserWindow}=require('electron'),fs=require('node:fs/promises'),pat
 if(!process.env.USHISHI_TEST_DATA||!process.env.USHISHI_TEST_COMMANDS)throw Error('An isolated test profile and output directory are required');
 app.setPath('userData',process.env.USHISHI_TEST_DATA);
 const out=process.env.USHISHI_TEST_COMMANDS,root=path.resolve(__dirname,'../dist'),pause=ms=>new Promise(r=>setTimeout(r,ms));
-const report={version:'0.4.1',checks:[],errors:[],screenshots:[],started:new Date().toISOString()};
+const report={version:'0.4.2',checks:[],errors:[],screenshots:[],started:new Date().toISOString()};
 app.whenReady().then(async()=>{
  await fs.mkdir(out,{recursive:true});
  const server=http.createServer(async(req,res)=>{try{if(req.url==='/fixture.html'){res.setHeader('Content-Type','text/html');res.end('<!doctype html><title>Isolated save fixture</title>');return;}const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname),prefix=pathname.startsWith('/udoku/')?'/udoku/':'/ushishi-puzzle-farm/';if(!pathname.startsWith(prefix))throw Error();const file=path.resolve(root,pathname.slice(prefix.length)||'index.html');if(!file.startsWith(root+path.sep))throw Error();res.setHeader('Content-Type',({'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.webmanifest':'application/manifest+json','.png':'image/png'})[path.extname(file)]||'application/octet-stream');res.end(await fs.readFile(file));}catch{res.statusCode=404;res.end('Not found');}});
@@ -51,7 +51,7 @@ app.whenReady().then(async()=>{
   // Same origin storage survives the switch from the old project path to /udoku/.
   await load(origin+'/ushishi-puzzle-farm/');await button('home-play');await playCell(7);await button('go-home');await load();await button('home-play');check('Existing game progress survives a project-path change',await run(`document.querySelectorAll('.cell')[7].dataset.mark==='2'`));await button('go-home');
   check('Service worker and manifest scoped to udoku',await run(`navigator.serviceWorker.ready.then(r=>r.scope)` )===url&&await run(`fetch('manifest.webmanifest').then(r=>r.json()).then(m=>m.scope==='./'&&m.start_url==='./'&&m.short_name==='udoku')`));
-  check('New offline cache includes theme script',await run(`caches.open('udoku-v0.4.1').then(c=>c.match('theme.js')).then(Boolean)`));
+  check('New offline cache includes theme script',await run(`caches.open('udoku-v0.4.2').then(c=>c.match('theme.js')).then(Boolean)`));
   await cdp('Network.enable');await cdp('Network.emulateNetworkConditions',{offline:true,latency:0,downloadThroughput:0,uploadThroughput:0});await load();check('New dark homepage loads offline',await run(`document.documentElement.dataset.theme==='dark'&&Boolean(document.getElementById('reset-progress'))`));await cdp('Network.emulateNetworkConditions',{offline:false,latency:0,downloadThroughput:-1,uploadThroughput:-1});
   await cdp('Emulation.setDeviceMetricsOverride',{width:320,height:640,deviceScaleFactor:1,mobile:true});await pause(120);check('320px screen has no horizontal overflow',await run('document.documentElement.scrollWidth===320'));await shot('udoku-home-small-dark.png');
   // Load an actual pre-update record shape, then exercise migration via the UI.

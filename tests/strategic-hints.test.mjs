@@ -41,8 +41,8 @@ test('level 40 now opens a complete logic path in at most three hints',()=>{
  const p=levels[39],m=model(p.n,p.k,p.regions),s=E.create(p);
  for(let i=0;i<3;i++)E.hint(s,p);
  const r=solve(m,{initial:s.marks,maxNodes:1});
- assert.equal(r.aborted,false);assert.equal(r.count,1);assert.equal(s.hints,1);
- assert.equal(s.marks.filter(v=>v===2).length,6,'the rest remain for the player to deduce');
+ assert.equal(r.aborted,false);assert.equal(r.count,1);assert.equal(s.hints,2);
+ assert.equal(s.marks.filter(v=>v===2).length,7,'the rest remain for the player to deduce');
 });
 
 test('early-level hint behavior and budgets remain unchanged',()=>{

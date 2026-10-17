@@ -1,0 +1,33 @@
+udoku web 0.4.2 — increased assistance and simpler home screen (2026-10-18 KST)
+
+Levels 1–39: unchanged, 2 hints / 2 lives / 1 opening Ayadan.
+Levels 40–59: 5 hints / 3 lives / 4 opening Ayadan.
+Levels 60–79: 6 hints / 3 lives / 5 opening Ayadan.
+Levels 80–100: 7 hints / 3 lives / 6 opening Ayadan.
+
+The home-screen life/chance text and heart icon are removed. Its existing hint
+information is now the third instruction item, visible on narrow screens as well.
+Gameplay hearts, controls, completion badges and character images are unchanged.
+
+Compatibility: all old opening cells remain the prefix of the new selection.
+One additional starting cell is selected in another color region; all later boards
+cover four board quarters with at least half-board span in both axes. Existing
+version-4 saves use their stored hintLimit to receive the one-hint increase once,
+preserving prior uses, mistakes, elapsed time, notes and completion records. A
+new opening clue replaces an X on that correct cell. Lost rounds stay lost in
+engine restoration. A newly completed active round is recorded by the existing
+completion handling. Puzzle files, IDs, solutions, hashes and save key are unchanged.
+
+Verification: 25 Node tests passed, including 1,468 v0.4.0/1 resource migration
+cases, older-save compatibility, full campaign resource checks, dispersed openings,
+and exact hint exhaustion. 98 isolated Chromium/mobile UI checks passed, including
+v0.4.1 reload/consumption migration, new home labels, new counters, reset behavior,
+offline loading and level-100 badges. Home screenshots were visually inspected.
+The 61 later boards still have a propagation-only solving path within their hint
+budgets; maximum hints on verified paths are 4/5, 4/6 and 5/7 by band. See
+hint-paths-v0.4.2.json or run node scripts/verify-hint-paths.mjs.
+Physical phones were not tested. Electron test flags are development-only.
+
+Only web/source in usisifan/udoku (ID 1423187970) is updated. Windows release
+0.2.0 and unrelated repositories are untouched. Service-worker cache v0.4.2
+activates normally after old game tabs close, without forced active-session reload.

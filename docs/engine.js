@@ -2,7 +2,7 @@
 (function(root){
 'use strict';
 const EMPTY=0,X=1,AYADAN=2;
-function rules(p){return p.id>=80?{hints:6,lives:3,opening:5}:p.id>=60?{hints:5,lives:3,opening:4}:p.id>=40?{hints:4,lives:3,opening:3}:{hints:2,lives:2,opening:1};}
+function rules(p){return p.id>=80?{hints:7,lives:3,opening:6}:p.id>=60?{hints:6,lives:3,opening:5}:p.id>=40?{hints:5,lives:3,opening:4}:{hints:2,lives:2,opening:1};}
 function starter(p){return Number.isInteger(p.given)&&p.solution.includes(p.given)?p.given:p.solution[0];}
 const openingCache=new WeakMap();
 function starters(p){

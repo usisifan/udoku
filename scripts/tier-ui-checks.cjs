@@ -4,14 +4,15 @@ module.exports=async({win,run,check,load,button,shot,playCell,saved,cdp,pause,or
   const data=await run(`(()=>{const id=${id},p=window.LEVELS[id-1],completed=Object.fromEntries(window.LEVELS.slice(0,id-1).map(q=>[q.id,{hash:q.sha256,elapsed:90000,lives:1,hintsUsed:1,date:'2026-10-17T00:00:00.000Z'}])),store={v:1,currentLevel:id,sound:false,completed,rounds:{}};
    if(${JSON.stringify(mode)}!=='fresh'){const marks=Array(p.n*p.n).fill(0);marks[p.given]=2;marks[p.regions.findIndex((_,i)=>!p.solution.includes(i))]=1;
     if(['finish','completed'].includes(${JSON.stringify(mode)})){for(const i of p.solution)marks[i]=2;if(${JSON.stringify(mode)}==='finish')marks[window.PuzzleEngine.starters(p).find(i=>i!==p.given)]=0;else completed[id]={hash:p.sha256,elapsed:70000,lives:1,hintsUsed:2,date:'2026-10-17T00:00:00.000Z'};}
-    store.rounds[id]={version:3,level:id,hash:p.sha256,marks,lives:1,hints:0,elapsed:70000,status:'playing'};}
+    store.rounds[id]={version:3,level:id,hash:p.sha256,marks,lives:1,hints:0,elapsed:70000,status:'playing'};
+    if(${JSON.stringify(mode)}==='v041'){const config=window.PuzzleEngine.rules(p),oldOpening=window.PuzzleEngine.starters(p).slice(0,-1);for(const i of oldOpening)marks[i]=2;Object.assign(store.rounds[id],{version:4,lives:2,lifeLimit:3,hints:0,hintLimit:config.hints-1});}}
    return store;})()`);
   await win.loadURL('about:blank');await win.loadURL(origin+'/fixture.html');
   await run(`localStorage.setItem('ushishi-puzzle-farm-progress-v2',${JSON.stringify(JSON.stringify(data))})`);await load();return data;
  }
  await cdp('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
- for(const [id,hints,lives,opening] of [[39,2,2,1],[40,4,3,3],[59,4,3,3],[60,5,3,4],[79,5,3,4],[80,6,3,5],[100,6,3,5]]){
-  await fixture(id);check('Level '+id+' home describes its allowance',await run(`document.getElementById('home-bubble').textContent.startsWith('${opening}마리')&&document.getElementById('home-life-label').textContent==='목숨 ${lives}회'&&document.getElementById('home-hint-label').textContent.includes('${hints}회')&&!document.getElementById('home-play').textContent.includes('이어서')`));
+ for(const [id,hints,lives,opening] of [[39,2,2,1],[40,5,3,4],[59,5,3,4],[60,6,3,5],[79,6,3,5],[80,7,3,6],[100,7,3,6]]){
+  await fixture(id);check('Level '+id+' home describes its allowance',await run(`document.getElementById('home-bubble').textContent.startsWith('${opening}마리')&&!document.getElementById('home-life-label')&&!document.getElementById('home-hearts')&&document.getElementById('home-hint-label').textContent.includes('${hints}회')&&!document.getElementById('home-play').textContent.includes('이어서')`));
   await button('home-play');
   check('Level '+id+' board displays correct counters and free clues',await run(`document.getElementById('hint-label').textContent==='힌트 ${hints}/${hints}'&&document.getElementById('hint-limit').textContent==='라운드당 ${hints}회'&&document.getElementById('life-count').textContent==='${lives} / ${lives}'&&document.querySelectorAll('#hearts span').length===${lives}&&document.querySelectorAll('.cell.given').length===${opening}&&document.querySelectorAll('.cell[data-mark="2"]').length===${opening}&&document.getElementById('opening-note').textContent==='시작 아야단 ${opening}마리 공개'&&document.getElementById('guide-copy').textContent.includes('${opening}마리')`));
   if([40,60,80].includes(id))await shot('udoku-level-'+id+'-opening.png');
@@ -21,14 +22,20 @@ module.exports=async({win,run,check,load,button,shot,playCell,saved,cdp,pause,or
   await button('restart');check('Level '+id+' restart describes its own allowance',await run(`document.getElementById('modal-content').textContent.includes('목숨 ${lives}회와 힌트 ${hints}회')&&document.getElementById('modal-content').textContent.includes('아야단 ${opening}마리')`));await button('restart-yes');
   check('Level '+id+' retry restores its exact allowance',await run(`document.getElementById('hint-label').textContent==='힌트 ${hints}/${hints}'&&document.getElementById('life-count').textContent==='${lives} / ${lives}'&&document.querySelectorAll('.cell[data-mark="2"]').length===${opening}`));
  }
- // Final tier: all six hints, three mistakes, and consistent result counters.
- for(let i=0;i<6;i++)await button('hint');check('Six hints exhaust the last tier',await run(`document.getElementById('hint-label').textContent==='힌트 0/6'&&document.getElementById('hint').disabled`));
+ // Final tier: all seven hints, three mistakes, and consistent result counters.
+ for(let i=0;i<7;i++)await button('hint');check('Seven hints exhaust the last tier',await run(`document.getElementById('hint-label').textContent==='힌트 0/7'&&document.getElementById('hint').disabled`));
  const wrong=await run('window.LEVELS[99].regions.findIndex((_,i)=>!window.LEVELS[99].solution.includes(i))');for(let i=0;i<3;i++)await playCell(wrong);await pause(500);
- check('Three mistakes end the last tier with correct result totals',await run(`document.getElementById('modal-title').textContent==='다시 도전해 볼까요?'&&document.querySelector('.result-stats').textContent.includes('0 / 3')&&document.querySelector('.result-stats').textContent.includes('6 / 6')`));
- for(const [id,hints,opening] of [[40,4,3],[60,5,4],[80,6,5]]){
+ check('Three mistakes end the last tier with correct result totals',await run(`document.getElementById('modal-title').textContent==='다시 도전해 볼까요?'&&document.querySelector('.result-stats').textContent.includes('0 / 3')&&document.querySelector('.result-stats').textContent.includes('7 / 7')`));
+ for(const [id,hints,opening] of [[40,5,4],[60,6,5],[80,7,6]]){
   const old=await fixture(id,'legacy');await run('window.flushGameSave()');let current=await saved();
   check('Legacy level '+id+' preserves history and grants only the increase',current.rounds[id].version===4&&current.rounds[id].hints===hints-2&&current.rounds[id].lives===2&&current.rounds[id].marks.filter(v=>v===2).length===opening&&current.rounds[id].marks[old.rounds[id].marks.indexOf(1)]===1&&current.rounds[id].elapsed>=70000&&current.rounds[id].elapsed<70100&&JSON.stringify(current.completed)===JSON.stringify(old.completed));
   await load();current=await saved();check('Legacy level '+id+' does not refill again',current.rounds[id].hints===hints-2&&current.rounds[id].lives===2);
+ }
+ for(const id of [40,60,80]){
+  const old=await fixture(id,'v041');await run('window.flushGameSave()');let current=await saved();
+  check('v0.4.1 level '+id+' gains exactly one hint with history and mistakes preserved',current.rounds[id].hints===1&&current.rounds[id].hintLimit===old.rounds[id].hintLimit+1&&current.rounds[id].lives===2&&current.rounds[id].marks.filter(v=>v===2).length===old.rounds[id].marks.filter(v=>v===2).length+1&&current.rounds[id].elapsed>=70000&&current.rounds[id].elapsed<70100&&JSON.stringify(current.completed)===JSON.stringify(old.completed));
+  await load();check('v0.4.1 level '+id+' increase is not duplicated by reload',(await saved()).rounds[id].hints===1);
+  await button('home-play');await button('hint');await button('go-home');await load();check('v0.4.1 level '+id+' extra hint stays spent',(await saved()).rounds[id].hints===0);
  }
  await fixture(40,'finish');await run('window.flushGameSave()');const complete=await saved();
  check('A newly revealed final clue records completion and preserves elapsed time',complete.completed[40]?.hintsUsed===2&&complete.completed[40].elapsed>=70000&&complete.completed[40].elapsed<70100&&complete.rounds[40].status==='won');
@@ -44,7 +51,7 @@ module.exports=async({win,run,check,load,button,shot,playCell,saved,cdp,pause,or
  check('Unlocked final level explicitly remains incomplete',await run(`(()=>{const b=document.querySelector('[data-level="100"]');return !b.disabled&&!b.classList.contains('done')&&!b.classList.contains('final-cleared')&&b.querySelector('.final-status').textContent==='미완료';})()`));
  await button('close-levels');await button('home-play');
  check('Redundant footer sentence is removed but navigation remains',await run(`!document.getElementById('level-note')&&document.querySelector('.footnote').textContent.trim()==='첫 화면게임 안내'`));
- const solution=await run('window.LEVELS[99].solution');for(const i of solution.slice(0,-1))await playCell(i);
+ const solution=await run('window.LEVELS[99].solution.filter(i=>!window.PuzzleEngine.starters(window.LEVELS[99]).includes(i))');for(const i of solution.slice(0,-1))await playCell(i);
  await button('go-home');await button('home-levels');
  check('One missing final Ayadan still has no completion star',await run(`!document.querySelector('[data-level="100"]').classList.contains('final-cleared')`));
  await button('close-levels');await button('home-play');await playCell(solution.at(-1));await pause(400);await run('window.flushGameSave()');
