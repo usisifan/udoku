@@ -1,0 +1,62 @@
+/* Development-only native input, campaign and mobile/PWA integration tests. */
+const fs=require('node:fs/promises'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
+const {BrowserWindow}=require('electron');const delay=ms=>new Promise(r=>setTimeout(r,ms));
+module.exports=async function(win,app){
+ const report={checks:[],errors:[],screenshots:[],started:new Date().toISOString(),runtimeFlags:process.argv.filter(a=>a.startsWith('--'))};
+ const out=process.env.USHISHI_TEST_COMMANDS;await fs.mkdir(out,{recursive:true});let server;
+ const run=js=>win.webContents.executeJavaScript(js,true),check=(name,value)=>{assert.ok(value,name);report.checks.push(name);};
+ function listen(){win.webContents.on('console-message',e=>{if(e.level==='error')report.errors.push(e.message);});}listen();
+ async function ready(){for(let i=0;i<200;i++){if(await run('Boolean(window.__gameReady)').catch(()=>false))return;await delay(50);}throw Error('Renderer not ready');}
+ async function button(id){await run(`document.getElementById(${JSON.stringify(id)}).click()`);await delay(70);}
+ async function center(i){return run(`(()=>{const r=document.querySelectorAll('.cell')[${i}].getBoundingClientRect();return {x:Math.round(r.x+r.width/2),y:Math.round(r.y+r.height/2)}})()`);}
+ async function click(i){const p=await center(i);win.webContents.sendInputEvent({type:'mouseMove',...p});win.webContents.sendInputEvent({type:'mouseDown',button:'left',clickCount:1,...p});await delay(25);win.webContents.sendInputEvent({type:'mouseUp',button:'left',clickCount:1,...p});await delay(35);}
+ async function double(i){await click(i);await click(i);await delay(70);}
+ async function drag(a,b){const p=await center(a),q=await center(b);win.webContents.sendInputEvent({type:'mouseMove',...p});win.webContents.sendInputEvent({type:'mouseDown',button:'left',clickCount:1,...p});await delay(30);for(let t=1;t<=10;t++){win.webContents.sendInputEvent({type:'mouseMove',button:'left',x:Math.round(p.x+(q.x-p.x)*t/10),y:Math.round(p.y+(q.y-p.y)*t/10)});await delay(15);}win.webContents.sendInputEvent({type:'mouseUp',button:'left',clickCount:1,...q});await delay(100);}
+ const marks=()=>run(`Array.from(document.querySelectorAll('.cell'),c=>Number(c.dataset.mark))`);
+ async function screenshot(name){await delay(300);await fs.writeFile(path.join(out,name),(await win.webContents.capturePage()).toPNG());report.screenshots.push(name);}
+ async function reload(){await run('window.flushGameSave()');win.webContents.reload();await delay(200);await ready();await delay(150);}
+ const layout=()=>run(`({width:innerWidth,height:innerHeight,scrollWidth:document.documentElement.scrollWidth,scrollHeight:document.documentElement.scrollHeight,images:Array.from(document.images).filter(i=>!i.complete||!i.naturalWidth).length})`);
+ try{
+  await ready();await delay(300);check('Desktop bridge and 100 levels',await run('Boolean(window.desktop)&&window.LEVELS.length===100'));
+  check('First launch opens title',await run(`!document.getElementById('home-screen').hidden&&document.getElementById('game-view').hidden`));
+  const time=await run(`document.getElementById('time').textContent`);await delay(1100);check('Title pauses timer',time===await run(`document.getElementById('time').textContent`));await screenshot('start-desktop.png');
+  await button('home-levels');check('Only level 1 initially unlocked',await run(`document.querySelectorAll('[data-level]:not(:disabled)').length===1&&document.querySelectorAll('[data-level]').length===100`));
+  await run(`(()=>{const b=document.querySelector('[data-level="100"]');b.disabled=false;b.click();})()`);check('Handler also rejects locked level',await run(`document.getElementById('level-number').textContent==='001'&&document.getElementById('modal').open`));
+  await button('close-levels');await button('home-play');check('4x4 first level with one-per-line rules',await run(`document.querySelectorAll('.cell').length===16&&Array.from(document.querySelectorAll('.rule-number')).every(e=>e.textContent==='1')`));
+  check('One free clue, two lives, one hint',await run(`document.querySelectorAll('.cell[data-mark="2"]').length===1&&document.getElementById('life-count').textContent==='2 / 2'&&document.getElementById('hint-label').textContent==='힌트 1/1'`));await screenshot('gameplay-level-001.png');
+  await drag(0,3);check('Mouse drag protects given',JSON.stringify((await marks()).slice(0,4))==='[1,2,1,1]');await drag(0,3);check('Drag from X erases notes',JSON.stringify((await marks()).slice(0,4))==='[0,2,0,0]');
+  await double(7);check('Double click places mascot',(await marks())[7]===2);await double(0);check('Mistake costs one life',await run(`document.getElementById('life-count').textContent==='1 / 2'`));await button('hint');check('Hint consumed and disabled',await run(`document.getElementById('hint').disabled`));
+  const before=await marks();await reload();check('Reload opens title and preserves marks',await run(`!document.getElementById('home-screen').hidden`)&&JSON.stringify(before)===JSON.stringify(await marks()));await button('home-play');
+  check('Resume preserves lives and hint',await run(`document.getElementById('life-count').textContent==='1 / 2'&&document.getElementById('hint').disabled`));await double(0);await delay(550);check('Second mistake ends round',await run(`document.getElementById('life-count').textContent==='0 / 2'&&document.getElementById('modal-title').textContent==='다시 도전해 볼까요?'`));
+  await button('result-next');check('Retry restores free clue and resources',(await marks()).filter(v=>v===2).length===1&&await run(`document.getElementById('life-count').textContent==='2 / 2'&&document.getElementById('hint-label').textContent==='힌트 1/1'`));
+  for(const i of await run('window.LEVELS[0].solution'))await double(i);await delay(300);check('Win dialog appears',await run(`document.getElementById('modal-title').textContent==='모두 찾았어요!'`));
+  await reload();await button('home-play');check('Reopening after win starts next level',await run(`document.getElementById('level-number').textContent==='002'&&document.querySelectorAll('.cell').length===25`));await button('menu');check('Only first two levels unlocked',await run(`document.querySelectorAll('[data-level]:not(:disabled)').length===2`));await button('close-levels');
+  // Walk the campaign through real UI handlers, with no production unlock bypass.
+  for(let id=2;id<=100;id++){
+   check('Campaign reaches level '+id,await run(`Number(document.getElementById('level-number').textContent)===${id}`));
+   if(id===10){await screenshot('gameplay-level-010.png');report.desktopLayout=await layout();check('Desktop fits and all images loaded',report.desktopLayout.scrollHeight<=report.desktopLayout.height&&report.desktopLayout.images===0);}
+   if(id===40)check('Two-per-line illustrations at level 40',await run(`document.querySelectorAll('.cell').length===196&&Array.from(document.querySelectorAll('.rule-number')).every(e=>e.textContent==='2')`));
+   if(id===100){check('400-cell final board',await run(`document.querySelectorAll('.cell').length===400`));await screenshot('gameplay-level-100.png');break;}
+   await run(`(()=>{const p=window.LEVELS[${id-1}];for(const i of p.solution)document.querySelectorAll('.cell')[i].dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true}));})()`);await delay(250);await button('result-next');
+  }
+  await run('window.flushGameSave()');
+  const root=path.resolve(__dirname,'../dist'),prefix='/ushishi-puzzle-farm/';
+  server=http.createServer(async(req,res)=>{try{const name=decodeURIComponent(new URL(req.url,'http://localhost').pathname);if(!name.startsWith(prefix))throw Error();const file=path.resolve(root,name.slice(prefix.length)||'index.html');if(!file.startsWith(root+path.sep))throw Error();const data=await fs.readFile(file);res.setHeader('Content-Type',({'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.webmanifest':'application/manifest+json','.png':'image/png'})[path.extname(file)]||'application/octet-stream');res.end(data);}catch{res.statusCode=404;res.end('Not found');}});
+  await new Promise(r=>server.listen(0,'127.0.0.1',r));const url=`http://127.0.0.1:${server.address().port}${prefix}`;
+  win=new BrowserWindow({width:390,height:844,show:false,webPreferences:{offscreen:true,backgroundThrottling:false,partition:'persist:web-test',sandbox:true,contextIsolation:true,nodeIntegration:false}});listen();await win.loadURL(url);await ready();win.webContents.debugger.attach('1.3');
+  const cdp=(method,args={})=>win.webContents.debugger.sendCommand(method,args);
+  await cdp('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});await cdp('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:1});check('Web build has no desktop bridge',await run('!window.desktop'));await screenshot('start-phone.png');await button('home-play');await delay(200);
+  async function touch(type,p){await cdp('Input.dispatchTouchEvent',{type,touchPoints:p?[{x:p.x,y:p.y,id:1}]:[]});await delay(35);}
+  async function tap(i){await touch('touchStart',await center(i));await touch('touchEnd');}
+  const a=await center(0),b=await center(3);await touch('touchStart',a);for(let t=1;t<=10;t++)await touch('touchMove',{x:a.x+(b.x-a.x)*t/10,y:a.y});await touch('touchEnd');check('Touch swipe paints X and protects clue',JSON.stringify((await marks()).slice(0,4))==='[1,2,1,1]');
+  await tap(7);await tap(7);await delay(100);check('Double tap places mascot',(await marks())[7]===2);report.phoneLayout=await layout();check('Phone has no width overflow or missing images',report.phoneLayout.scrollWidth<=390&&report.phoneLayout.images===0);await screenshot('gameplay-phone.png');
+  await reload();await button('home-play');check('Web save survives reload',(await marks())[7]===2&&(await marks())[0]===1);check('Service worker project scope',await run(`navigator.serviceWorker.ready.then(r=>r.scope)`)===url);check('Offline cache complete',await run(`caches.open('ushishi-puzzle-farm-v0.2.0').then(c=>c.keys()).then(k=>k.length>=10)`));
+  await cdp('Network.enable');await cdp('Network.emulateNetworkConditions',{offline:true,latency:0,downloadThroughput:0,uploadThroughput:0});await reload();await button('home-play');check('Offline reload restores game and progress',(await marks())[7]===2&&await run('window.LEVELS.length===100'));await cdp('Network.emulateNetworkConditions',{offline:false,latency:0,downloadThroughput:-1,uploadThroughput:-1});
+  // A profile fixture injected only by the test debugger before web boot.
+  const completed=await run(`Object.fromEntries(window.LEVELS.map(p=>[p.id,{hash:p.sha256,elapsed:1000}]))`);
+  await cdp('Page.enable');await cdp('Page.addScriptToEvaluateOnNewDocument',{source:`localStorage.setItem('ushishi-puzzle-farm-progress-v2',JSON.stringify({v:1,currentLevel:100,rounds:{},completed:${JSON.stringify(completed)}}));`});await reload();await button('home-play');check('Mobile test fixture opens final board',await run(`document.getElementById('level-number').textContent==='100'`));await button('zoom-board');check('Zoom gives dense board usable cells',await run(`document.querySelector('.cell').getBoundingClientRect().width>=35&&document.getElementById('board-viewport').scrollWidth>390`));
+  await button('pan-board');const initial=await marks(),v=await run(`document.getElementById('board-viewport').getBoundingClientRect().toJSON()`);await touch('touchStart',{x:300,y:v.y+170});for(let t=1;t<=10;t++)await touch('touchMove',{x:300-20*t,y:v.y+170});await touch('touchEnd');await delay(300);check('Touch panning scrolls without marking',await run(`document.getElementById('board-viewport').scrollLeft>0`)&&JSON.stringify(initial)===JSON.stringify(await marks()));await screenshot('gameplay-phone-zoom.png');
+  await cdp('Emulation.setDeviceMetricsOverride',{width:320,height:640,deviceScaleFactor:1,mobile:true});await button('zoom-board');report.smallLayout=await layout();check('320px phone has no horizontal overflow',report.smallLayout.scrollWidth<=320);await screenshot('gameplay-phone-small.png');check('No renderer errors',report.errors.length===0);report.passed=true;
+ }catch(e){report.passed=false;report.failure=e.stack;await screenshot('failure.png').catch(()=>{});}
+ if(server)server.close();await fs.writeFile(path.join(out,'ui-tests.json'),JSON.stringify(report,null,2));console.log(JSON.stringify(report));app.exit(report.passed?0:1);
+};

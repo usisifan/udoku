@@ -1,0 +1,7 @@
+{
+  "version": "0.2.0",
+  "portableExeBooted": null,
+  "status": "Not confirmed in the restricted Windows test account",
+  "packagedApplicationBootTest": "Passed for the identical win-unpacked application; see packaged-startup.json",
+  "productionRuntimeFlagsModified": false
+}

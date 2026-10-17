@@ -1,0 +1,68 @@
+{
+  "name": "ushishi-puzzle-farm",
+  "version": "0.2.0",
+  "private": true,
+  "description": "우시시와 아야단의 오리지널 논리 퍼즐",
+  "main": "main.cjs",
+  "author": "Ushishi Puzzle Project",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "electron .",
+    "generate": "node scripts/generate.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "verify": "node scripts/verify.mjs",
+    "dist": "electron-builder --win portable zip --x64",
+    "prepare:web": "node scripts/prepare-web.mjs"
+  },
+  "build": {
+    "appId": "com.ushishi.puzzlefarm",
+    "productName": "시시의 퍼즐 목장",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "main.cjs",
+      "preload.cjs",
+      "dist/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "dist/assets/icon.ico",
+      "signAndEditExecutable": true,
+      "signExecutable": false
+    },
+    "portable": {
+      "artifactName": "Ushishi-Puzzle-Farm-${version}-Windows.exe",
+      "requestExecutionLevel": "user"
+    },
+    "artifactName": "Ushishi-Puzzle-Farm-${version}-Windows.${ext}",
+    "electronDist": "node_modules/electron/dist",
+    "executableName": "Ushishi-Puzzle-Farm",
+    "npmRebuild": false,
+    "extraFiles": [
+      {
+        "from": "README.txt",
+        "to": "읽어주세요.txt"
+      }
+    ]
+  },
+  "devDependencies": {
+    "electron": "44.8.0",
+    "electron-builder": "26.15.3"
+  }
+}

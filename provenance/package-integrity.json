@@ -1,0 +1,92 @@
+{
+  "version": "0.2.0",
+  "passed": true,
+  "filesMatched": 17,
+  "checks": [
+    {
+      "file": "main.cjs",
+      "bytes": 3456,
+      "sha256": "da0675c004608f75963cd2752c10a0e97eb948e8606f4af64ebd191a7ada7134"
+    },
+    {
+      "file": "preload.cjs",
+      "bytes": 261,
+      "sha256": "dc329f9c65b7a01e90aad32a66171809314e039720b64bbab6a414a803ebdd0e"
+    },
+    {
+      "file": "dist/app.js",
+      "bytes": 24153,
+      "sha256": "972d20f349449517b12729c0e245e9d60abb9409bc438578aa8337b3c92a1c68"
+    },
+    {
+      "file": "dist/assets/app-icon-192.png",
+      "bytes": 21793,
+      "sha256": "0bd2a4cc12ac616e637546c9947f58efce71e7a69364ec3756297b14c430e253"
+    },
+    {
+      "file": "dist/assets/app-icon-512.png",
+      "bytes": 93083,
+      "sha256": "14df615e71aa12dee3db8dc743f043b1360f2ee9991731b053f5d4f1d1ea5e1f"
+    },
+    {
+      "file": "dist/assets/ayadan.png",
+      "bytes": 36491,
+      "sha256": "6d868a339b545d02a7f719f014aa9bca994f7bdd205d7eab3f9b205c8065d3b8"
+    },
+    {
+      "file": "dist/assets/favicon.png",
+      "bytes": 6494,
+      "sha256": "bddd98984537f256b604e8a0461f10bb80f7f902730cde8c431987362db0fe45"
+    },
+    {
+      "file": "dist/assets/icon.ico",
+      "bytes": 95412,
+      "sha256": "e821a8628e4bef73d6c7626de858bf5ed89b286728f75438bcfbde1598ce5314"
+    },
+    {
+      "file": "dist/assets/ushishi.png",
+      "bytes": 1646234,
+      "sha256": "5fe4f0284c65e52a1360078660f9360bfb6ae346f9a40ba388f6f75ada68881b"
+    },
+    {
+      "file": "dist/engine.js",
+      "bytes": 2568,
+      "sha256": "02ab88eb0ffc13c0801c3f982a01359de5f832865965f92f6dd8b679d1e623af"
+    },
+    {
+      "file": "dist/index.html",
+      "bytes": 7237,
+      "sha256": "63934ac03eb2578eb441a18d445eb029bb76d605a357c597011d8c1709d01127"
+    },
+    {
+      "file": "dist/levels.js",
+      "bytes": 88806,
+      "sha256": "b0cec03402a98c80caa0b70fdac774e74fd8517a18c6370f9fa22530e3d82345"
+    },
+    {
+      "file": "dist/levels.json",
+      "bytes": 88790,
+      "sha256": "002e779891e9e24a62324fc0f13a57e933f5299f22c582aecaffa02146a3eb2e"
+    },
+    {
+      "file": "dist/manifest.webmanifest",
+      "bytes": 518,
+      "sha256": "2956eff6f02004b281da853be4c829cc6340093f47e022df5131281cb77d5bc4"
+    },
+    {
+      "file": "dist/pwa.js",
+      "bytes": 591,
+      "sha256": "08ac93872b68f7662b6819284b0abb0619013aebc68817eff14f4bffa9b21903"
+    },
+    {
+      "file": "dist/style.css",
+      "bytes": 21331,
+      "sha256": "b0e912a2de85e6bd3b839dc6333ab0ab2b683c11e5dff4c810f929f93619c47c"
+    },
+    {
+      "file": "dist/sw.js",
+      "bytes": 1062,
+      "sha256": "7d0b3a2a74857615b25907ef604ab6cc81d9e1779197788f90784486bf3d9bc4"
+    }
+  ]
+}
