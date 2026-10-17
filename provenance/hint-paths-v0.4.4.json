@@ -1,0 +1,1275 @@
+{
+  "version": "0.4.4",
+  "createdAt": "2026-10-17T21:27:40.460Z",
+  "method": "Start with the current opening clues; add actual engine hints until the separate constraint solver completes via propagation at one node. Propagation uses quotas, touching exclusions, non-touching partners, and locked groups. No DFS branch is permitted in the final solving path. User X notes are ignored when ranking hints.",
+  "limits": "This establishes a path from a fresh round within its hint budget, not that every player can see the deductions or that every previously spent hint sequence remains sufficient. Existing hint uses are not refunded.",
+  "boards": 61,
+  "bands": [
+    {
+      "range": "40-59",
+      "boards": 20,
+      "hintAllowance": 5,
+      "maxHintsOnVerifiedPaths": 3
+    },
+    {
+      "range": "60-79",
+      "boards": 20,
+      "hintAllowance": 6,
+      "maxHintsOnVerifiedPaths": 3
+    },
+    {
+      "range": "80-100",
+      "boards": 21,
+      "hintAllowance": 7,
+      "maxHintsOnVerifiedPaths": 3
+    }
+  ],
+  "entries": [
+    {
+      "level": 40,
+      "sha256": "fcb9b3f5516f3b23da6d7a330adc8209bbb755dae785a51fbf116d01e4ec8dfc",
+      "opening": [
+        16,
+        195,
+        155,
+        67,
+        175,
+        104
+      ],
+      "hintAllowance": 5,
+      "hintsUsed": 2,
+      "hintCells": [
+        96,
+        130
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 41,
+      "sha256": "0672774672c491e281f7da82eaeca12efff3cfa56a8864cd2074e4af8afca5ab",
+      "opening": [
+        58,
+        180,
+        25,
+        186,
+        97,
+        118
+      ],
+      "hintAllowance": 5,
+      "hintsUsed": 2,
+      "hintCells": [
+        35,
+        67
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 42,
+      "sha256": "f616a4101c4d0af2e7b3606ef13fa91d77f1a0bc23db73feee61a135c33bd992",
+      "opening": [
+        106,
+        14,
+        7,
+        113,
+        194,
+        173
+      ],
+      "hintAllowance": 5,
+      "hintsUsed": 2,
+      "hintCells": [
+        134,
+        60
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 43,
+      "sha256": "42d4e36ecfc6a3b419720975fcb9b67c8910f3214b056b0b546d6a49942e98d7",
+      "opening": [
+        146,
+        27,
+        1,
+        180,
+        168,
+        63
+      ],
+      "hintAllowance": 5,
+      "hintsUsed": 1,
+      "hintCells": [
+        5
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 44,
+      "sha256": "316da849317b5fc9422ea8d60ba7e10d43194bf0fa35e86bb82c3f54494da9f6",
+      "opening": [
+        104,
+        27,
+        194,
+        16,
+        169,
+        84
+      ],
+      "hintAllowance": 5,
+      "hintsUsed": 1,
+      "hintCells": [
+        33
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 45,
+      "sha256": "da70052ed93d624f740e6beba31df554beceb8f5b08a5cedf4220a0f22205c16",
+      "opening": [
+        170,
+        13,
+        194,
+        17,
+        92,
+        99
+      ],
+      "hintAllowance": 5,
+      "hintsUsed": 2,
+      "hintCells": [
+        47,
+        150
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 46,
+      "sha256": "3c68290f717bf2fbf9448281128a917cbdb906ee87cd9cca6158c47f319424e5",
+      "opening": [
+        25,
+        169,
+        29,
+        192,
+        118,
+        111
+      ],
+      "hintAllowance": 5,
+      "hintsUsed": 2,
+      "hintCells": [
+        65,
+        4
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 47,
+      "sha256": "bb336d61e2bd9b4941cc26688f997d9dc1cd92d308755aba581ea43fcf0e39c1",
+      "opening": [
+        37,
+        185,
+        181,
+        42,
+        134,
+        114
+      ],
+      "hintAllowance": 5,
+      "hintsUsed": 1,
+      "hintCells": [
+        112
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 48,
+      "sha256": "d9fb50edb4895371450d67587aa89acdf8db5ec7397bb8d357ff0c2b921ee6e8",
+      "opening": [
+        165,
+        2,
+        182,
+        24,
+        102,
+        96
+      ],
+      "hintAllowance": 5,
+      "hintsUsed": 2,
+      "hintCells": [
+        154,
+        8
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 49,
+      "sha256": "980d93f70f146cf7c70ea9dae2812f6ead9d27959a1a70cd2988f4f5eaa0030b",
+      "opening": [
+        26,
+        169,
+        0,
+        192,
+        88,
+        111
+      ],
+      "hintAllowance": 5,
+      "hintsUsed": 2,
+      "hintCells": [
+        68,
+        63
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 50,
+      "sha256": "41a53ac995c1ad602b078f4c6d176b97b024ec2ee760cf5e40b96906503bbd7a",
+      "opening": [
+        172,
+        10,
+        195,
+        15,
+        97,
+        76
+      ],
+      "hintAllowance": 5,
+      "hintsUsed": 2,
+      "hintCells": [
+        143,
+        141
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 51,
+      "sha256": "f0c47454caafa1ebc5fad3fc3ed4ab18e5af3daa6299d53c926ba614fb9c8a12",
+      "opening": [
+        137,
+        14,
+        169,
+        12,
+        75,
+        189
+      ],
+      "hintAllowance": 5,
+      "hintsUsed": 1,
+      "hintCells": [
+        48
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 52,
+      "sha256": "4e42b7b64de2bf811bad29b81f2322d9fd0b77b3e11ce198bd0bc0c962d90772",
+      "opening": [
+        107,
+        0,
+        141,
+        69,
+        194,
+        20
+      ],
+      "hintAllowance": 5,
+      "hintsUsed": 1,
+      "hintCells": [
+        4
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 53,
+      "sha256": "65c5bc5e98d8e78859f424b2c33db15e0ba2a92aa4f79b8785cf15f3b756989d",
+      "opening": [
+        10,
+        185,
+        14,
+        180,
+        91,
+        111
+      ],
+      "hintAllowance": 5,
+      "hintsUsed": 1,
+      "hintCells": [
+        147
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 54,
+      "sha256": "fbfb7a802bb84b8c6cdb32450385719dc1edc20dfc909563a2e820cbbcb3c667",
+      "opening": [
+        9,
+        140,
+        178,
+        15,
+        89,
+        82
+      ],
+      "hintAllowance": 5,
+      "hintsUsed": 1,
+      "hintCells": [
+        27
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 55,
+      "sha256": "88058a7280ce2914ab948410e7c1a748448b7c9d6f4eab834ca430fccc71447b",
+      "opening": [
+        21,
+        182,
+        180,
+        58,
+        83,
+        120
+      ],
+      "hintAllowance": 5,
+      "hintsUsed": 1,
+      "hintCells": [
+        37
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 56,
+      "sha256": "f81dbabd55c5798c1f22f89e1998df52ff90c44225658114c02c0bb62544b6c2",
+      "opening": [
+        163,
+        42,
+        13,
+        169,
+        63,
+        83
+      ],
+      "hintAllowance": 5,
+      "hintsUsed": 3,
+      "hintCells": [
+        11,
+        104,
+        84
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 57,
+      "sha256": "4bb6ee433ffba201226ef24482147b5d3f6ca4b2a30fb1d8f37a7e405d3f458c",
+      "opening": [
+        55,
+        126,
+        191,
+        18,
+        117,
+        108
+      ],
+      "hintAllowance": 5,
+      "hintsUsed": 0,
+      "hintCells": [],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 58,
+      "sha256": "48dc058e9e0a0c67d7e515b98dc86af9102554f0cbd621ede9dbc95fbeb7024d",
+      "opening": [
+        125,
+        0,
+        183,
+        9,
+        103,
+        188
+      ],
+      "hintAllowance": 5,
+      "hintsUsed": 2,
+      "hintCells": [
+        44,
+        37
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 59,
+      "sha256": "24dd68983ff27ec6b60e4b7ff29121461b6744987858d9a5a9cb938538265844",
+      "opening": [
+        21,
+        169,
+        153,
+        70,
+        68,
+        190
+      ],
+      "hintAllowance": 5,
+      "hintsUsed": 2,
+      "hintCells": [
+        9,
+        49
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 60,
+      "sha256": "0d9594b64610e4ffa2b1202239f9ff147da27612d9057d7d63985d8aa8298750",
+      "opening": [
+        57,
+        255,
+        192,
+        1,
+        216,
+        110,
+        117,
+        30
+      ],
+      "hintAllowance": 6,
+      "hintsUsed": 1,
+      "hintCells": [
+        129
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 61,
+      "sha256": "773c8fc86b42942e6a4af2152139fbb96088978ceadc6b1be17bfdcea10c1a42",
+      "opening": [
+        237,
+        1,
+        242,
+        76,
+        112,
+        167,
+        8,
+        159
+      ],
+      "hintAllowance": 6,
+      "hintsUsed": 2,
+      "hintCells": [
+        21,
+        40
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 62,
+      "sha256": "89e98c4501f284db22da08740773b7f5112c4c4753ec4279c7c94cbb6acb6d89",
+      "opening": [
+        231,
+        17,
+        94,
+        223,
+        131,
+        40,
+        153,
+        252
+      ],
+      "hintAllowance": 6,
+      "hintsUsed": 1,
+      "hintCells": [
+        5
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 63,
+      "sha256": "bbe16ac02653831892755dabb24936d91da521e219cf0b9985b424e22771588a",
+      "opening": [
+        133,
+        30,
+        191,
+        65,
+        224,
+        8,
+        246,
+        139
+      ],
+      "hintAllowance": 6,
+      "hintsUsed": 1,
+      "hintCells": [
+        60
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 64,
+      "sha256": "0b2b99abb6b7ce63dc6ec069aeea2a84fc38416a3831a0ce6a435cf873513ef6",
+      "opening": [
+        125,
+        1,
+        179,
+        254,
+        24,
+        185,
+        80,
+        175
+      ],
+      "hintAllowance": 6,
+      "hintsUsed": 0,
+      "hintCells": [],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 65,
+      "sha256": "c6e36c52411df826dd377106c572b1249458cb80ecbabe4cf380f89a55d5c3fa",
+      "opening": [
+        102,
+        255,
+        30,
+        177,
+        217,
+        80,
+        7,
+        58
+      ],
+      "hintAllowance": 6,
+      "hintsUsed": 1,
+      "hintCells": [
+        68
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 66,
+      "sha256": "248f326a9e698cf4509a1edc82dbf123d1ab32a73eb44916827428f01228ba14",
+      "opening": [
+        51,
+        190,
+        241,
+        13,
+        248,
+        105,
+        146,
+        111
+      ],
+      "hintAllowance": 6,
+      "hintsUsed": 1,
+      "hintCells": [
+        19
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 67,
+      "sha256": "e61f75454e1bd2943d31a4516cad1d07ffbbca5c219de29fe3e9e619275c1f7c",
+      "opening": [
+        225,
+        14,
+        255,
+        51,
+        153,
+        41,
+        112,
+        94
+      ],
+      "hintAllowance": 6,
+      "hintsUsed": 1,
+      "hintCells": [
+        43
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 68,
+      "sha256": "f83913df296b0ea0d871ef2bc64691585c922ee80cbacccb8183933e1253ffa8",
+      "opening": [
+        150,
+        31,
+        223,
+        49,
+        240,
+        8,
+        108,
+        229
+      ],
+      "hintAllowance": 6,
+      "hintsUsed": 3,
+      "hintCells": [
+        181,
+        29,
+        183
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 69,
+      "sha256": "e9d6b969819f75be6752a0a248a1bf9d1e1fdf191d582c9a1a7068fbb5949108",
+      "opening": [
+        156,
+        3,
+        176,
+        13,
+        248,
+        87,
+        81,
+        197
+      ],
+      "hintAllowance": 6,
+      "hintsUsed": 2,
+      "hintCells": [
+        75,
+        113
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 70,
+      "sha256": "5e51d8d307b869227606b9c2f7f1fcad0ec9fde052a9bf3765d1ad6fedc567d5",
+      "opening": [
+        232,
+        0,
+        77,
+        131,
+        175,
+        225,
+        38,
+        254
+      ],
+      "hintAllowance": 6,
+      "hintsUsed": 2,
+      "hintCells": [
+        123,
+        18
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 71,
+      "sha256": "226179d585ae29a1e0e5c8d1e138178303f47c887daa772a6326321305d797af",
+      "opening": [
+        36,
+        254,
+        209,
+        110,
+        168,
+        27,
+        113,
+        48
+      ],
+      "hintAllowance": 6,
+      "hintsUsed": 3,
+      "hintCells": [
+        84,
+        191,
+        75
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 72,
+      "sha256": "912cf938315067f2cad13aeacd03398ad15227fe1aa053af15354a8e6c29c412",
+      "opening": [
+        164,
+        31,
+        206,
+        4,
+        248,
+        80,
+        108,
+        225
+      ],
+      "hintAllowance": 6,
+      "hintsUsed": 1,
+      "hintCells": [
+        110
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 73,
+      "sha256": "6195eb1d3adfdcc7b4949c1d063b1526bde98c38c78a578157cd3b4f1c4f6bfd",
+      "opening": [
+        105,
+        241,
+        32,
+        238,
+        63,
+        7,
+        144,
+        200
+      ],
+      "hintAllowance": 6,
+      "hintsUsed": 2,
+      "hintCells": [
+        107,
+        5
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 74,
+      "sha256": "e84a4e95c832f25dff3f0c1d146a61fbfc1a028cb4a0d68f7951e599844812a8",
+      "opening": [
+        226,
+        29,
+        0,
+        239,
+        152,
+        97,
+        126,
+        247
+      ],
+      "hintAllowance": 6,
+      "hintsUsed": 2,
+      "hintCells": [
+        67,
+        140
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 75,
+      "sha256": "42f38f8b2b273e8a158a2983710da342dc2abd1f09590db47f962dcff6b123bd",
+      "opening": [
+        161,
+        31,
+        236,
+        22,
+        106,
+        244,
+        158,
+        99
+      ],
+      "hintAllowance": 6,
+      "hintsUsed": 1,
+      "hintCells": [
+        54
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 76,
+      "sha256": "d99361f45cc0400bdaae15ffc6ff4e43e0ba6da7f4352a9e3fd24fea1fbf873b",
+      "opening": [
+        218,
+        17,
+        14,
+        160,
+        89,
+        255,
+        6,
+        181
+      ],
+      "hintAllowance": 6,
+      "hintsUsed": 1,
+      "hintCells": [
+        38
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 77,
+      "sha256": "3526f047f3f42cf2f8517e6fcc150daa4b998969df7001c3b193a70c28cf88c6",
+      "opening": [
+        82,
+        254,
+        30,
+        224,
+        153,
+        7,
+        143,
+        179
+      ],
+      "hintAllowance": 6,
+      "hintsUsed": 2,
+      "hintCells": [
+        205,
+        56
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 78,
+      "sha256": "d55db4276578ac9e892c995e8c94fd3ff5a9a54022544bc51de718acbb49ef6c",
+      "opening": [
+        71,
+        224,
+        175,
+        31,
+        247,
+        49,
+        147,
+        10
+      ],
+      "hintAllowance": 6,
+      "hintsUsed": 1,
+      "hintCells": [
+        122
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 79,
+      "sha256": "f28ad006ea137d0f24d6c3cc7e6c2787ea5eeedd1d7b100206ce5284ac858b6d",
+      "opening": [
+        166,
+        15,
+        17,
+        222,
+        224,
+        40,
+        123,
+        245
+      ],
+      "hintAllowance": 6,
+      "hintsUsed": 2,
+      "hintCells": [
+        101,
+        42
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 80,
+      "sha256": "4619ba7f8e317bd076b546461cba93494272547b22fb0e05a04f10325cba798a",
+      "opening": [
+        210,
+        19,
+        301,
+        82,
+        378,
+        52,
+        391,
+        157,
+        204,
+        307
+      ],
+      "hintAllowance": 7,
+      "hintsUsed": 0,
+      "hintCells": [],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 81,
+      "sha256": "ca9b287c3f93cbb28e9f8017e63fee47b350688e686bc8590f388d4ecd8f26ab",
+      "opening": [
+        269,
+        38,
+        81,
+        299,
+        362,
+        133,
+        200,
+        12,
+        390,
+        26
+      ],
+      "hintAllowance": 7,
+      "hintsUsed": 2,
+      "hintCells": [
+        196,
+        309
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 82,
+      "sha256": "34f9af4fb81b7a0377305e981a8c5dd2bef1126f2ea1bdcf70e07c104b209133",
+      "opening": [
+        113,
+        360,
+        399,
+        141,
+        268,
+        5,
+        218,
+        38,
+        334,
+        240
+      ],
+      "hintAllowance": 7,
+      "hintsUsed": 2,
+      "hintCells": [
+        332,
+        129
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 83,
+      "sha256": "4b6101fb2a982b49efd1ccc0c3720902730b9f145ad1a9cdd4539803f149b6e2",
+      "opening": [
+        124,
+        278,
+        16,
+        367,
+        300,
+        153,
+        20,
+        353,
+        119,
+        208
+      ],
+      "hintAllowance": 7,
+      "hintsUsed": 0,
+      "hintCells": [],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 84,
+      "sha256": "b4850757f4babdc453e1654cf6a0b53aaf9705ba6ba04a2a5dc34edef89f3d95",
+      "opening": [
+        157,
+        360,
+        1,
+        391,
+        167,
+        338,
+        33,
+        221,
+        306,
+        272
+      ],
+      "hintAllowance": 7,
+      "hintsUsed": 2,
+      "hintCells": [
+        205,
+        89
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 85,
+      "sha256": "67813cbfbc935db84984caa334f2769851f38a6a840a6b2f47d6e341a4012cd2",
+      "opening": [
+        353,
+        40,
+        39,
+        301,
+        168,
+        7,
+        215,
+        287,
+        142,
+        116
+      ],
+      "hintAllowance": 7,
+      "hintsUsed": 1,
+      "hintCells": [
+        77
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 86,
+      "sha256": "af69abb2a033a5d04f35ec0ddffa70a888d9c1d35c4474ee99176f40c6ee999d",
+      "opening": [
+        229,
+        18,
+        80,
+        239,
+        363,
+        375,
+        30,
+        134,
+        241,
+        106
+      ],
+      "hintAllowance": 7,
+      "hintsUsed": 1,
+      "hintCells": [
+        176
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 87,
+      "sha256": "2587dc3e0fe0bb18a449a69ef56278a50def7f154f3b25e6c6eec4d9b3e7662a",
+      "opening": [
+        192,
+        380,
+        1,
+        379,
+        38,
+        10,
+        204,
+        294,
+        305,
+        115
+      ],
+      "hintAllowance": 7,
+      "hintsUsed": 2,
+      "hintCells": [
+        155,
+        26
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 88,
+      "sha256": "d8834b0d232f71e880e1649f9b3c8d906acce1d236b256f446296fd5ee0c0192",
+      "opening": [
+        8,
+        394,
+        281,
+        78,
+        167,
+        279,
+        366,
+        160,
+        112,
+        84
+      ],
+      "hintAllowance": 7,
+      "hintsUsed": 2,
+      "hintCells": [
+        277,
+        124
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 89,
+      "sha256": "05c0ca48ce28d9e8faf70cf9501f6e0bcda3e76b257602857b351e9dc4843324",
+      "opening": [
+        13,
+        381,
+        299,
+        40,
+        188,
+        139,
+        330,
+        161,
+        355,
+        106
+      ],
+      "hintAllowance": 7,
+      "hintsUsed": 1,
+      "hintCells": [
+        92
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 90,
+      "sha256": "d488cc57ab59eb2db006e70aeaa573f74bb9203c60f12abb85a16fe6c805a590",
+      "opening": [
+        286,
+        79,
+        24,
+        338,
+        171,
+        340,
+        141,
+        371,
+        10,
+        197
+      ],
+      "hintAllowance": 7,
+      "hintsUsed": 0,
+      "hintCells": [],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 91,
+      "sha256": "9f77023e4fb53231c381d9c5f389d2d29384743eefe950f2997e512562921a90",
+      "opening": [
+        256,
+        20,
+        321,
+        14,
+        128,
+        399,
+        372,
+        224,
+        269,
+        155
+      ],
+      "hintAllowance": 7,
+      "hintsUsed": 3,
+      "hintCells": [
+        60,
+        216,
+        130
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 92,
+      "sha256": "a9bc88e30837d46cce3ef9ce8c0501f5f895db8c51c19b2205db28ab2cd6ada3",
+      "opening": [
+        215,
+        20,
+        321,
+        19,
+        392,
+        108,
+        161,
+        248,
+        358,
+        74
+      ],
+      "hintAllowance": 7,
+      "hintsUsed": 1,
+      "hintCells": [
+        163
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 93,
+      "sha256": "f98f1d5334f5e2c34947cb0da40fcf85cda505a161063b8ca457ee462691b0fd",
+      "opening": [
+        351,
+        19,
+        64,
+        381,
+        173,
+        220,
+        279,
+        30,
+        286,
+        96
+      ],
+      "hintAllowance": 7,
+      "hintsUsed": 1,
+      "hintCells": [
+        175
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 94,
+      "sha256": "d8af2db4034af297baa83cd91f63a12940d46dcce32795d6f610234787fbf5da",
+      "opening": [
+        113,
+        381,
+        140,
+        354,
+        247,
+        219,
+        99,
+        367,
+        29,
+        15
+      ],
+      "hintAllowance": 7,
+      "hintsUsed": 3,
+      "hintCells": [
+        31,
+        217,
+        245
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 95,
+      "sha256": "3f6f8e9c2041eedc680186f5c1835de9c6ecb08c136401e89b9475e86a78a985",
+      "opening": [
+        261,
+        35,
+        338,
+        44,
+        349,
+        192,
+        158,
+        9,
+        121,
+        108
+      ],
+      "hintAllowance": 7,
+      "hintsUsed": 1,
+      "hintCells": [
+        72
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 96,
+      "sha256": "4093ff52a0127fe3af18abe744b6c9a8103c76ef22606ce8c1a4c168a601760a",
+      "opening": [
+        364,
+        79,
+        0,
+        338,
+        189,
+        27,
+        122,
+        350,
+        176,
+        244
+      ],
+      "hintAllowance": 7,
+      "hintsUsed": 2,
+      "hintCells": [
+        205,
+        41
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 97,
+      "sha256": "7b4ae2296b341f9c9d92107fd8ca76736eea2e17fc02308753c98872170a2c85",
+      "opening": [
+        359,
+        1,
+        382,
+        38,
+        149,
+        330,
+        240,
+        196,
+        12,
+        26
+      ],
+      "hintAllowance": 7,
+      "hintsUsed": 1,
+      "hintCells": [
+        243
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 98,
+      "sha256": "e838e08e7627bbb4e350751a80e1a91a55ceb055085d5ae66b12ff702403b316",
+      "opening": [
+        140,
+        378,
+        17,
+        361,
+        211,
+        2,
+        30,
+        139,
+        387,
+        243
+      ],
+      "hintAllowance": 7,
+      "hintsUsed": 1,
+      "hintCells": [
+        34
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 99,
+      "sha256": "f3e41e770e2f259706b8d91aa24337c4a251b70c63b4d7c18ed90dc8e345fd8d",
+      "opening": [
+        248,
+        38,
+        60,
+        339,
+        360,
+        48,
+        176,
+        221,
+        386,
+        353
+      ],
+      "hintAllowance": 7,
+      "hintsUsed": 2,
+      "hintCells": [
+        250,
+        337
+      ],
+      "solvesWithoutSearchBranches": true
+    },
+    {
+      "level": 100,
+      "sha256": "03e936ceb8ac2f008a22560b7e9022e7b8fa60da6a91708c5474f493ba957df4",
+      "opening": [
+        334,
+        20,
+        38,
+        382,
+        187,
+        11,
+        177,
+        221,
+        308,
+        46
+      ],
+      "hintAllowance": 7,
+      "hintsUsed": 1,
+      "hintCells": [
+        78
+      ],
+      "solvesWithoutSearchBranches": true
+    }
+  ]
+}

@@ -5,13 +5,13 @@ module.exports=async({win,run,check,load,button,shot,playCell,saved,cdp,pause,or
    if(${JSON.stringify(mode)}!=='fresh'){const marks=Array(p.n*p.n).fill(0);marks[p.given]=2;marks[p.regions.findIndex((_,i)=>!p.solution.includes(i))]=1;
     if(['finish','completed'].includes(${JSON.stringify(mode)})){for(const i of p.solution)marks[i]=2;if(${JSON.stringify(mode)}==='finish')marks[window.PuzzleEngine.starters(p).find(i=>i!==p.given)]=0;else completed[id]={hash:p.sha256,elapsed:70000,lives:1,hintsUsed:2,date:'2026-10-17T00:00:00.000Z'};}
     store.rounds[id]={version:3,level:id,hash:p.sha256,marks,lives:1,hints:0,elapsed:70000,status:'playing'};
-    if(['v041','v042'].includes(${JSON.stringify(mode)})){const older=${JSON.stringify(mode)}==='v041',oldHints=(id<60?5:id<80?6:7)-(older?1:0),oldCount=(id<60?4:id<80?5:6)-(older?1:0),oldOpening=window.PuzzleEngine.starters(p).slice(0,oldCount);for(const i of oldOpening)marks[i]=2;Object.assign(store.rounds[id],{version:4,lives:2,lifeLimit:3,hints:older?0:1,hintLimit:oldHints});}}
+    if(['v041','v042','v043'].includes(${JSON.stringify(mode)})){const latest=${JSON.stringify(mode)}==='v043',older=${JSON.stringify(mode)}==='v041',oldHints=(id<60?5:id<80?6:7)-(older?1:0),oldCount=latest?(id<60?5:id<80?6:8):(id<60?4:id<80?5:6)-(older?1:0),oldOpening=window.PuzzleEngine.starters(p).slice(0,oldCount);for(const i of oldOpening)marks[i]=2;Object.assign(store.rounds[id],{version:4,lives:2,lifeLimit:latest&&id>=60?4:3,hints:older?0:1,hintLimit:oldHints});}}
    return store;})()`);
   await win.loadURL('about:blank');await win.loadURL(origin+'/fixture.html');
   await run(`localStorage.setItem('ushishi-puzzle-farm-progress-v2',${JSON.stringify(JSON.stringify(data))})`);await load();return data;
  }
  await cdp('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
- for(const [id,hints,lives,opening] of [[39,2,2,1],[40,5,3,5],[59,5,3,5],[60,6,4,6],[79,6,4,6],[80,7,4,8],[100,7,4,8]]){
+ for(const [id,hints,lives,opening] of [[39,2,2,1],[40,5,3,6],[59,5,3,6],[60,6,4,8],[79,6,4,8],[80,7,4,10],[100,7,4,10]]){
   await fixture(id);check('Level '+id+' home describes its allowance',await run(`document.getElementById('home-bubble').textContent.startsWith('${opening}마리')&&!document.getElementById('home-life-label')&&!document.getElementById('home-hearts')&&document.getElementById('home-hint-label').textContent.includes('${hints}회')&&!document.getElementById('home-play').textContent.includes('이어서')`));
   await button('home-play');
   check('Level '+id+' board displays correct counters and free clues',await run(`document.getElementById('hint-label').textContent==='힌트 ${hints}/${hints}'&&document.getElementById('hint-limit').textContent==='라운드당 ${hints}회'&&document.getElementById('life-count').textContent==='${lives} / ${lives}'&&document.querySelectorAll('#hearts span').length===${lives}&&document.querySelectorAll('.cell.given').length===${opening}&&document.querySelectorAll('.cell[data-mark="2"]').length===${opening}&&document.getElementById('opening-note').textContent==='시작 아야단 ${opening}마리 공개'&&document.getElementById('guide-copy').textContent.includes('${opening}마리')`));
@@ -26,22 +26,23 @@ module.exports=async({win,run,check,load,button,shot,playCell,saved,cdp,pause,or
  for(let i=0;i<7;i++)await button('hint');check('Seven hints exhaust the last tier',await run(`document.getElementById('hint-label').textContent==='힌트 0/7'&&document.getElementById('hint').disabled`));
  const wrong=await run('window.LEVELS[99].regions.findIndex((_,i)=>!window.LEVELS[99].solution.includes(i))');for(let i=0;i<4;i++)await playCell(wrong);await pause(500);
  check('Four mistakes end the last tier with correct result totals',await run(`document.getElementById('modal-title').textContent==='다시 도전해 볼까요?'&&document.querySelector('.result-stats').textContent.includes('0 / 4')&&document.querySelector('.result-stats').textContent.includes('7 / 7')`));
- for(const [id,hints,lives,opening] of [[40,5,3,5],[60,6,4,6],[80,7,4,8]]){
+ for(const [id,hints,lives,opening] of [[40,5,3,6],[60,6,4,8],[80,7,4,10]]){
   const old=await fixture(id,'legacy');await run('window.flushGameSave()');let current=await saved();
   check('Legacy level '+id+' preserves history and grants only the increase',current.rounds[id].version===4&&current.rounds[id].hints===hints-2&&current.rounds[id].lives===lives-1&&current.rounds[id].marks.filter(v=>v===2).length===opening&&current.rounds[id].marks[old.rounds[id].marks.indexOf(1)]===1&&current.rounds[id].elapsed>=70000&&current.rounds[id].elapsed<70100&&JSON.stringify(current.completed)===JSON.stringify(old.completed));
   await load();current=await saved();check('Legacy level '+id+' does not refill again',current.rounds[id].hints===hints-2&&current.rounds[id].lives===lives-1);
  }
  for(const id of [40,60,80]){
   const old=await fixture(id,'v041');await run('window.flushGameSave()');let current=await saved();
-  check('v0.4.1 level '+id+' gains exactly one hint with history and mistakes preserved',current.rounds[id].hints===1&&current.rounds[id].hintLimit===old.rounds[id].hintLimit+1&&current.rounds[id].lives===(id<60?2:3)&&current.rounds[id].marks.filter(v=>v===2).length===(id<60?5:id<80?6:8)&&current.rounds[id].elapsed>=70000&&current.rounds[id].elapsed<70100&&JSON.stringify(current.completed)===JSON.stringify(old.completed));
+  check('v0.4.1 level '+id+' gains exactly one hint with history and mistakes preserved',current.rounds[id].hints===1&&current.rounds[id].hintLimit===old.rounds[id].hintLimit+1&&current.rounds[id].lives===(id<60?2:3)&&current.rounds[id].marks.filter(v=>v===2).length===(id<60?6:id<80?8:10)&&current.rounds[id].elapsed>=70000&&current.rounds[id].elapsed<70100&&JSON.stringify(current.completed)===JSON.stringify(old.completed));
   await load();check('v0.4.1 level '+id+' increase is not duplicated by reload',(await saved()).rounds[id].hints===1);
   await button('home-play');await button('hint');await button('go-home');await load();check('v0.4.1 level '+id+' extra hint stays spent',(await saved()).rounds[id].hints===0);
  }
- for(const id of [40,60,80]){
-  const old=await fixture(id,'v042');await run('window.flushGameSave()');let current=await saved();
-  check('v0.4.2 level '+id+' keeps spent hints and adds only new lives and openings',current.rounds[id].hints===1&&current.rounds[id].hintLimit===old.rounds[id].hintLimit&&current.rounds[id].lives===(id<60?2:3)&&current.rounds[id].lifeLimit===(id<60?3:4)&&current.rounds[id].marks.filter(v=>v===2).length===(id<60?5:id<80?6:8)&&current.rounds[id].elapsed>=70000&&current.rounds[id].elapsed<70100&&JSON.stringify(current.completed)===JSON.stringify(old.completed));
-  await load();current=await saved();check('v0.4.2 level '+id+' life increase does not repeat on reload',current.rounds[id].hints===1&&current.rounds[id].lives===(id<60?2:3));
-  await button('home-play');const wrong=await run(`window.LEVELS[${id-1}].regions.findIndex((_,i)=>!window.LEVELS[${id-1}].solution.includes(i))`);await playCell(wrong);await button('hint');await button('go-home');await load();current=await saved();check('v0.4.2 level '+id+' new mistake and hint use remain spent',current.rounds[id].hints===0&&current.rounds[id].lives===(id<60?1:2));
+ for(const mode of ['v042','v043'])for(const id of [40,60,80]){
+  const expectedLives=mode==='v043'?2:id<60?2:3;
+  const old=await fixture(id,mode);await run('window.flushGameSave()');let current=await saved();
+  check(mode+' level '+id+' preserves spent resources and grants the current openings',current.rounds[id].hints===1&&current.rounds[id].hintLimit===old.rounds[id].hintLimit&&current.rounds[id].lives===expectedLives&&current.rounds[id].lifeLimit===(id<60?3:4)&&current.rounds[id].marks.filter(v=>v===2).length===(id<60?6:id<80?8:10)&&current.rounds[id].elapsed>=70000&&current.rounds[id].elapsed<70100&&JSON.stringify(current.completed)===JSON.stringify(old.completed));
+  await load();current=await saved();check(mode+' level '+id+' reload does not refill resources',current.rounds[id].hints===1&&current.rounds[id].lives===expectedLives);
+  await button('home-play');const wrong=await run(`window.LEVELS[${id-1}].regions.findIndex((_,i)=>!window.LEVELS[${id-1}].solution.includes(i))`);await playCell(wrong);await button('hint');await button('go-home');await load();current=await saved();check(mode+' level '+id+' new mistake and hint use remain spent',current.rounds[id].hints===0&&current.rounds[id].lives===expectedLives-1);
  }
  await fixture(40,'finish');await run('window.flushGameSave()');const complete=await saved();
  check('A newly revealed final clue records completion and preserves elapsed time',complete.completed[40]?.hintsUsed===2&&complete.completed[40].elapsed>=70000&&complete.completed[40].elapsed<70100&&complete.rounds[40].status==='won');

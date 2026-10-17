@@ -26,7 +26,7 @@ test('legacy completed and lost rounds keep their status and best-result history
  assert.deepEqual(E.validCompletions({completed:{1:completed},rounds:{1:won}},levels),{1:completed});
  const lost={...won,marks:E.create(p).marks,lives:0,status:'lost'};const r=E.restore(lost,p);assert.equal(r.status,'lost');assert.equal(E.hint(r,p).type,'ignored');
 });
-test('opening clues and resources match each campaign band',()=>{for(const p of levels){const expected=p.id<40?[2,2,1]:p.id<60?[5,3,5]:p.id<80?[6,4,6]:[7,4,8],s=E.create(p);assert.deepEqual([s.hints,s.lives,s.marks.filter(x=>x===2).length],expected);assert.equal(s.marks[p.given],2);for(const i of E.starters(p)){assert.ok(p.solution.includes(i));assert.equal(E.mark(s,i,0),false);assert.equal(E.place(s,p,i).type,'ignored');}}});
+test('opening clues and resources match each campaign band',()=>{for(const p of levels){const expected=p.id<40?[2,2,1]:p.id<60?[5,3,6]:p.id<80?[6,4,8]:[7,4,10],s=E.create(p);assert.deepEqual([s.hints,s.lives,s.marks.filter(x=>x===2).length],expected);assert.equal(s.marks[p.given],2);for(const i of E.starters(p)){assert.ok(p.solution.includes(i));assert.equal(E.mark(s,i,0),false);assert.equal(E.place(s,p,i).type,'ignored');}}});
 test('older saved rounds gain their opening clue without refunding hint or lives',()=>{const p=levels[0],s=E.create(p);s.marks[p.given]=1;s.hints=0;s.lives=1;const r=E.restore(s,p);assert.equal(r.marks[p.given],2);assert.equal(r.hints,0);assert.equal(r.lives,1);});
 test('all later openings span different regions and directions with stable positions',()=>{
  for(const p of levels.filter(p=>p.id>=40)){
